@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
+import 'widgets/my_app.dart';
 
 void main() {
-  runApp(const MyApp());
+  runApp(MyApp());
 }
 
-class MyApp extends StatelessWidget {
+/* class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
   // This widget is the root of your application.
@@ -113,3 +114,4 @@ class _MyHomePageState extends State<MyHomePage> {
     );
   }
 }
+ */
