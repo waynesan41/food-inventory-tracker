@@ -1,4 +1,6 @@
 //==========
+import "dart:io";
+
 import "package:flutter/material.dart";
 import "package:provider/provider.dart";
 import "package:intl/intl.dart";
@@ -37,69 +39,79 @@ class FoodDetailScreen extends StatelessWidget {
         ],
       ),
       body: SingleChildScrollView(
-        child: Column(
-          children: [
-            Text(
-              "${foodDetail.name}",
-              style: Theme.of(context).textTheme.titleMedium,
-            ),
-            Divider(),
-            Container(
-                child: Column(
-              children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(
-                      "Added Date (${DateTime.now().difference(foodDetail.addedDate).inDays.toString()} days ago)",
-                      style: Theme.of(context).textTheme.titleSmall,
-                    ),
-                    Text(
-                      "Expire Date",
-                      style: Theme.of(context).textTheme.titleSmall,
-                    ),
-                  ],
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(
-                        "${DateFormat.yMd().add_jm().format(foodDetail.addedDate)}"),
-                    Text(
-                        "${foodDetail.expireDate != null ? DateFormat.yMd().format(foodDetail.expireDate!) : "Not Added"}"),
-                  ],
-                ),
-              ],
-            )),
-            Container(
-              width: double.infinity,
-              margin: const EdgeInsets.symmetric(vertical: 10, horizontal: 0),
-              child: InteractiveViewer(
-                constrained: true,
-                child: Image.network(
-                  foodDetail.imgUrl.toString(),
-                  fit: BoxFit.cover,
-                ),
+        child: Container(
+          padding: const EdgeInsets.symmetric(
+            vertical: 10,
+            horizontal: 10,
+          ),
+          child: Column(
+            children: [
+              Text(
+                "${foodDetail.name}",
+                style: Theme.of(context).textTheme.titleMedium,
               ),
-            ),
-            Container(
-              margin: EdgeInsets.only(
-                bottom: 10,
-              ),
-              child: Column(
+              Divider(),
+              Container(
+                  child: Column(
                 children: [
-                  Container(
-                    margin: const EdgeInsets.only(bottom: 5),
-                    child: Text(
-                      "Description",
-                      style: Theme.of(context).textTheme.titleSmall,
-                    ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        "Added Date (${DateTime.now().difference(foodDetail.addedDate).inDays.toString()} days ago)",
+                        style: Theme.of(context).textTheme.titleSmall,
+                      ),
+                      Text(
+                        "Expire Date",
+                        style: Theme.of(context).textTheme.titleSmall,
+                      ),
+                    ],
                   ),
-                  Text("${foodDetail.description ?? "No Description"}")
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                          "${DateFormat.yMd().add_jm().format(foodDetail.addedDate)}"),
+                      Text(
+                          "${foodDetail.expireDate != null ? DateFormat.yMd().format(foodDetail.expireDate!) : "Not Added"}"),
+                    ],
+                  ),
                 ],
+              )),
+              Container(
+                width: double.infinity,
+                margin: const EdgeInsets.symmetric(vertical: 10, horizontal: 0),
+                // child: InteractiveViewer(
+                //   constrained: true,
+                child: foodDetail.imgUrl == null
+                    ? Image(
+                        image: AssetImage('assets/images/noimage.jpg'),
+                      )
+                    : Image.file(
+                        File(foodDetail.imgUrl.toString()),
+                        fit: BoxFit.contain,
+                      ),
+                // ),
               ),
-            )
-          ],
+              Container(
+                margin: EdgeInsets.only(
+                  bottom: 10,
+                ),
+                child: Column(
+                  children: [
+                    Container(
+                      margin: const EdgeInsets.only(bottom: 5),
+                      child: Text(
+                        "Description",
+                        style: Theme.of(context).textTheme.titleSmall,
+                      ),
+                    ),
+                    Text("${foodDetail.description ?? "No Description"}")
+                  ],
+                ),
+              )
+            ],
+          ),
         ),
       ),
     );

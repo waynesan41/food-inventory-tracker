@@ -1,4 +1,6 @@
 //===
+import "dart:io";
+
 import "package:flutter/material.dart";
 import "package:intl/intl.dart";
 
@@ -14,35 +16,105 @@ class EditFoodScreen extends StatefulWidget {
 }
 
 class _EditFoodScreenState extends State<EditFoodScreen> {
+  bool _initial = true;
+  bool _isLoading = false;
   final _form = GlobalKey<FormState>(); // Global Key to submit form
+  late int _id;
+  String? _name;
+  String? _imgUrl;
+  String? _description;
   DateTime? _addedDate;
   DateTime? _expireDate;
+  File? _pickedImage;
+
+  void _selectImage(File? pickedImage) {
+    _pickedImage = pickedImage;
+  }
+
+  void _presentDatePicker(DateTime? initDate, int dateType) {
+    showDatePicker(
+      context: context,
+      initialDate: initDate == null ? DateTime.now() : initDate,
+      firstDate: DateTime(2000),
+      lastDate: dateType == 1 ? DateTime.now() : DateTime(2100),
+    ).then((pickedData) {
+      setState(() {
+        if (pickedData == null) {
+          return;
+        }
+        if (dateType == 1) {
+          _addedDate = pickedData;
+        } else if (dateType == 2) {
+          _expireDate = pickedData;
+        }
+      });
+    });
+  }
 
   @override
-  void dispose() {
-    //To Avoid Memory Leak
-    /* _imageUrlFocusNode.removeListener(_updateImageUrl);
-    _priceFocusNode.dispose();
-    _descriptionFocusNode.dispose();
-    _imageUrlController.dispose();
-    _imageUrlFocusNode.dispose(); */
-    super.dispose();
+  void initState() {
+    _initial = false;
+    super.initState();
+  }
+
+  @override
+  void didChangeDependencies() {
+    // TODO: implement didChangeDependencies
+    if (!_initial) {
+      final foodDetail = ModalRoute.of(context)?.settings.arguments as FoodItem;
+      _id = foodDetail.id;
+      _name = foodDetail.name;
+      _imgUrl = foodDetail.imgUrl;
+      _addedDate = foodDetail.addedDate;
+      _expireDate = foodDetail.expireDate;
+      _description = foodDetail.description;
+    }
+    super.didChangeDependencies();
+  }
+
+  void _saveForm() async {
+    _form.currentState?.validate(); //Check Filter Input from form
+    _form.currentState?.save(); // Save Form
+    setState(() {
+      _isLoading = !_isLoading;
+    });
+
+    FoodItem updatedFood = FoodItem(id: _id, addedDate: _addedDate!);
+
+    /* setState(() {
+      _isLoading = false;
+    }); */
+    // Navigator.of(context).pop();
   }
 
   @override
   Widget build(BuildContext context) {
-    final foodDetail = ModalRoute.of(context)?.settings.arguments as FoodItem;
+    /* final foodDetail = ModalRoute.of(context)?.settings.arguments as FoodItem;
     _addedDate = foodDetail.addedDate;
-    _expireDate = foodDetail.expireDate;
-
+    _expireDate = foodDetail.expireDate; */
     return Scaffold(
       appBar: AppBar(
-        title: Text("Edit Food Item"),
+        title:
+            _isLoading ? CircularProgressIndicator() : Text("Edit Food Item"),
         actions: [
-          IconButton(
-            onPressed: () {},
-            icon: Icon(Icons.check),
-          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: [
+              IconButton(
+                onPressed: () {
+                  Navigator.of(context).pop();
+                  Navigator.of(context).pop();
+                },
+                icon: const Icon(Icons.cancel_outlined),
+              ),
+              IconButton(
+                onPressed: () {
+                  _saveForm();
+                },
+                icon: const Icon(Icons.check),
+              ),
+            ],
+          )
         ],
       ),
       body: Form(
@@ -53,7 +125,7 @@ class _EditFoodScreenState extends State<EditFoodScreen> {
             child: Column(
               children: [
                 TextFormField(
-                  initialValue: foodDetail.name,
+                  initialValue: _name,
                   decoration: InputDecoration(
                       labelText: "Food Name",
                       labelStyle: Theme.of(context).textTheme.titleSmall,
@@ -63,7 +135,8 @@ class _EditFoodScreenState extends State<EditFoodScreen> {
                       )),
                 ),
                 ImageInput(
-                  imgUrl: foodDetail.imgUrl!,
+                  _imgUrl,
+                  _selectImage,
                 ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -79,8 +152,18 @@ class _EditFoodScreenState extends State<EditFoodScreen> {
                             .format(_addedDate!)
                             .toString()),
                         ElevatedButton(
-                          onPressed: () {},
+                          onPressed: () {
+                            _presentDatePicker(_addedDate, 1);
+                          },
                           child: const Text("Change Added Date"),
+                        ),
+                        ElevatedButton(
+                          onPressed: () {
+                            setState(() {
+                              _addedDate = DateTime.now();
+                            });
+                          },
+                          child: const Text("Set  Date to Now"),
                         )
                       ],
                     ),
@@ -91,16 +174,66 @@ class _EditFoodScreenState extends State<EditFoodScreen> {
                           style: Theme.of(context).textTheme.titleSmall,
                         ),
                         _expireDate == null
-                            ? Text("No Expire Date")
+                            ? const Text("No Expire Date")
                             : Text(DateFormat.yMd()
                                 .format(_expireDate!)
                                 .toString()),
                         ElevatedButton(
-                          onPressed: () {},
+                          onPressed: () {
+                            _presentDatePicker(_expireDate, 2);
+                          },
                           child: const Text("Change Expire Date"),
+                        ),
+                        ElevatedButton(
+                          onPressed: () {
+                            setState(() {
+                              _expireDate = null;
+                            });
+                          },
+                          child: const Text("Remove Expire Date"),
                         )
                       ],
                     )
+                  ],
+                ),
+                Container(
+                  margin: EdgeInsets.symmetric(vertical: 15),
+                  child: TextFormField(
+                    initialValue: _description,
+                    keyboardType: TextInputType.multiline,
+                    maxLines: 4,
+                    style: TextStyle(fontSize: 15),
+                    decoration: InputDecoration(
+                        labelText: "Description",
+                        labelStyle: Theme.of(context).textTheme.titleSmall,
+                        contentPadding: const EdgeInsets.symmetric(
+                          vertical: 10,
+                          horizontal: 5,
+                        )),
+                  ),
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  children: [
+                    ElevatedButton(
+                      child: Text("Cancel"),
+                      style: ButtonStyle(
+                          backgroundColor:
+                              MaterialStateProperty.all(Colors.orange[700])),
+                      onPressed: () {
+                        Navigator.of(context).pop();
+                        Navigator.of(context).pop();
+                      },
+                    ),
+                    ElevatedButton(
+                      child: Text("Update"),
+                      style: ButtonStyle(
+                          backgroundColor:
+                              MaterialStateProperty.all(Colors.green[700])),
+                      onPressed: () {
+                        _saveForm();
+                      },
+                    ),
                   ],
                 )
               ],

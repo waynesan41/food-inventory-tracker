@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:food_inventory_tracker/model/food_item.dart';
@@ -25,10 +27,14 @@ class FoodCard extends StatelessWidget {
         ), */
         borderRadius: BorderRadius.circular(10),
         child: GridTile(
-          child: Image.network(
-            foodOne.imgUrl.toString(),
-            fit: BoxFit.cover,
-          ),
+          child: foodOne.imgUrl == null
+              ? Image(
+                  image: AssetImage('assets/images/noimage.jpg'),
+                )
+              : Image.file(
+                  File(foodOne.imgUrl.toString()),
+                  fit: BoxFit.cover,
+                ),
           footer: Container(
             padding: EdgeInsets.only(left: 5),
             decoration: BoxDecoration(

@@ -1,5 +1,5 @@
 import "package:flutter/material.dart";
-import "package:food_inventory_tracker/widgets/appBar/search_input.dart";
+import 'package:food_inventory_tracker/widgets/mainScreenAppBar/search_input.dart';
 
 class TopAppBar extends AppBar {
   // const TopAppBar();
