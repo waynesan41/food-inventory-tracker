@@ -24,7 +24,7 @@ class MyApp extends StatelessWidget {
       ],
       child: Consumer<OptionData>(builder: (ctx, optData, _) {
         return MaterialApp(
-            title: 'SQFLiite Testing Gound',
+            title: 'Food Inventory Tracker',
             theme: ThemeData(
               textTheme: TextTheme(
                   titleMedium: const TextStyle(

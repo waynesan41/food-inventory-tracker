@@ -55,8 +55,8 @@ class FoodItemList with ChangeNotifier {
       id: 5,
       name: "Tuna Fish",
       description: "Fresh Full Tuna Fish",
-      imgUrl:
-          "/data/user/0/com.example.food_inventory_tracker/app_flutter/tuna.jpg",
+      imgUrl: null,
+      // "/data/user/0/com.example.food_inventory_tracker/app_flutter/tuna.jpg",
       addedDate: DateTime.parse("2023-01-21 20:13:04Z"),
       // expireDate: DateTime.parse("2023-07-21 20:13:04Z"),
     ),
@@ -99,6 +99,11 @@ class FoodItemList with ChangeNotifier {
 
   void editFoodItem(int id, FoodItem updatedFood) {
     print(id);
+    print(updatedFood.name);
+    final prodIndex = _foodItemList.indexWhere((prod) => prod.id == id);
+    _foodItemList[prodIndex] = updatedFood;
+    notifyListeners();
+
     //Edit Item with the ID
   }
 }

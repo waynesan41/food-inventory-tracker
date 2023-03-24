@@ -15,11 +15,11 @@ class FoodDetailScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final foodId = ModalRoute.of(context)?.settings.arguments as int;
-    final foodDetail = Provider.of<FoodItemList>(context, listen: false)
-        .foodDetailById(foodId);
+    final foodDetail =
+        Provider.of<FoodItemList>(context).foodDetailById(foodId);
     return Scaffold(
       appBar: AppBar(
-        title: Text("${foodDetail.name}"),
+        title: Text("${foodDetail.name ?? "No Name"}"),
         actions: [
           IconButton(
             onPressed: () {},
@@ -47,7 +47,7 @@ class FoodDetailScreen extends StatelessWidget {
           child: Column(
             children: [
               Text(
-                "${foodDetail.name}",
+                "${foodDetail.name ?? "No Name"}",
                 style: Theme.of(context).textTheme.titleMedium,
               ),
               Divider(),

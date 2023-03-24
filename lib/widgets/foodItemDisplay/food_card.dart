@@ -45,7 +45,9 @@ class FoodCard extends StatelessWidget {
               children: [
                 Container(
                   alignment: Alignment.topLeft,
-                  child: Text(foodOne.name.toString()),
+                  child: foodOne.name == null
+                      ? Text("")
+                      : Text(foodOne.name.toString()),
                 ),
                 Container(
                   alignment: Alignment.topLeft,
