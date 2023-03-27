@@ -75,15 +75,18 @@ class MyApp extends StatelessWidget {
                   ? const ColorScheme.dark(
                       primary: Color.fromARGB(255, 255, 255, 255),
                       secondary: Color.fromARGB(255, 208, 208, 208),
+                      error: Color.fromARGB(255, 202, 51, 40),
                       background: Color.fromARGB(171, 0, 0, 0),
                     )
                   : const ColorScheme.light(
                       primary: Colors.blueGrey,
                       secondary: Colors.blueGrey,
+                      error: Color.fromARGB(255, 202, 51, 40),
                       background: Color.fromARGB(206, 158, 158, 158)),
             ),
             home: MainScreen(),
             routes: {
+              MainScreen.routeName: (ctx) => MainScreen(),
               FoodDetailScreen.routeName: (ctx) => FoodDetailScreen(),
               EditFoodScreen.routName: (ctx) => EditFoodScreen(),
             });

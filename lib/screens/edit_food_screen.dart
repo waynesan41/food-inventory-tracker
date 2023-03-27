@@ -116,13 +116,13 @@ class _EditFoodScreenState extends State<EditFoodScreen> {
     }
     FoodItem updatedFood = FoodItem(
       id: _id,
-      name: _name,
-      description: _description,
+      name: _name == "" ? null : _name,
+      description: _description == "" ? null : _description,
       imgUrl: _imgUrl,
       addedDate: _addedDate!,
       expireDate: _expireDate,
-      deleted: _deleted,
       hidden: _hidden,
+      deleted: _deleted,
     );
     print("11111111111BMIT ISSSSSS CALL");
     Provider.of<FoodItemList>(context, listen: false)
@@ -251,7 +251,7 @@ class _EditFoodScreenState extends State<EditFoodScreen> {
                               MaterialStateProperty.all(Colors.orange[700])),
                       onPressed: () {
                         Navigator.of(context).pop();
-                        Navigator.of(context).pop();
+                        // Navigator.of(context).pop();
                       },
                     ),
                     ElevatedButton(

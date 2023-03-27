@@ -2,6 +2,8 @@
 import "dart:io";
 
 import "package:flutter/material.dart";
+import "package:food_inventory_tracker/widgets/foodItemDisplay/image_full_screen.dart";
+import "package:food_inventory_tracker/widgets/foodItemDisplay/option_buttons.dart";
 import "package:provider/provider.dart";
 import "package:intl/intl.dart";
 
@@ -50,7 +52,10 @@ class FoodDetailScreen extends StatelessWidget {
                 "${foodDetail.name ?? "No Name"}",
                 style: Theme.of(context).textTheme.titleMedium,
               ),
-              Divider(),
+              Divider(
+                color: Theme.of(context).colorScheme.secondary,
+                height: 10,
+              ),
               Container(
                   child: Column(
                 children: [
@@ -79,6 +84,10 @@ class FoodDetailScreen extends StatelessWidget {
                 ],
               )),
               Container(
+                margin: const EdgeInsets.only(top: 5),
+                child: OptionButtons(foodDetail),
+              ),
+              Container(
                 width: double.infinity,
                 margin: const EdgeInsets.symmetric(vertical: 10, horizontal: 0),
                 // child: InteractiveViewer(
@@ -87,10 +96,22 @@ class FoodDetailScreen extends StatelessWidget {
                     ? Image(
                         image: AssetImage('assets/images/noimage.jpg'),
                       )
-                    : Image.file(
-                        File(foodDetail.imgUrl.toString()),
-                        fit: BoxFit.contain,
+                    : GestureDetector(
+                        onTap: () {
+                          Navigator.push(context,
+                              MaterialPageRoute(builder: (_) {
+                            return ImageFullScreen(foodDetail.imgUrl);
+                          }));
+                        },
+                        child: Hero(
+                          tag: "imageHero",
+                          child: Image.file(
+                            File(foodDetail.imgUrl.toString()),
+                            fit: BoxFit.contain,
+                          ),
+                        ),
                       ),
+
                 // ),
               ),
               Container(
@@ -106,7 +127,8 @@ class FoodDetailScreen extends StatelessWidget {
                         style: Theme.of(context).textTheme.titleSmall,
                       ),
                     ),
-                    Text("${foodDetail.description ?? "No Description"}")
+                    Text("${foodDetail.description ?? "No Description"}"),
+                    Text("${foodDetail.imgUrl ?? "No Image"}")
                   ],
                 ),
               )
