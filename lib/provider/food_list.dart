@@ -15,7 +15,7 @@ class FoodItemList with ChangeNotifier {
   Future<void> fetchAndSetFoodItemList() async {
     final dataList = await DBHelper.getData();
 
-    _foodItemList = dataList.map(
+    _foodItemList = await dataList.map(
       (item) {
         print(item);
         return FoodItem(
@@ -34,7 +34,6 @@ class FoodItemList with ChangeNotifier {
         );
       },
     ).toList();
-
     notifyListeners();
   }
 
@@ -57,11 +56,27 @@ class FoodItemList with ChangeNotifier {
     }
   }
 
+  // Add New Food Item =================================================
+  Future<void> addFoodItem(FoodItem newFood) async {
+    final result = await DBHelper.addData(newFood);
+    print("NEWWWWWWWWW ID: $result");
+
+    final insertFood = FoodItem(
+      id: result,
+      name: newFood.name,
+      description: newFood.description,
+      imgUrl: newFood.imgUrl,
+      addedDate: newFood.addedDate,
+      expireDate: newFood.expireDate,
+    );
+    _foodItemList.insert(0, insertFood);
+
+    notifyListeners();
+  }
+
   // Deleting Item =====================================================
 
   // Hidding Item ======================================================
 
   // Forever Delete Item Item ==========================================
-
-  // Add New Food Item =================================================
 }

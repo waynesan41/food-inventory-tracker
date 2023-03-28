@@ -3,13 +3,14 @@ import "dart:io";
 
 import "package:flutter/material.dart";
 import "package:food_inventory_tracker/provider/food_list.dart";
-import "package:food_inventory_tracker/widgets/editFootItem/edit_appbar.dart";
+import "package:food_inventory_tracker/widgets/editAddFootItem/buttons_update.dart";
+import 'package:food_inventory_tracker/widgets/editAddFootItem/edit_appbar.dart';
 import "package:intl/intl.dart";
 import "package:path_provider/path_provider.dart" as syspaths;
 import "package:path/path.dart" as path;
 
 import "package:food_inventory_tracker/model/food_item.dart";
-import "package:food_inventory_tracker/widgets/editFootItem/input_image.dart";
+import 'package:food_inventory_tracker/widgets/editAddFootItem/input_image.dart';
 import "package:provider/provider.dart";
 
 class EditFoodScreen extends StatefulWidget {
@@ -225,46 +226,24 @@ class _EditFoodScreenState extends State<EditFoodScreen> {
                   ],
                 ),
                 Container(
-                  margin: EdgeInsets.symmetric(vertical: 15),
+                  margin: const EdgeInsets.symmetric(vertical: 15),
                   child: TextFormField(
                     onChanged: (value) => _description = value,
                     initialValue: _description,
                     keyboardType: TextInputType.multiline,
                     maxLines: 4,
-                    style: TextStyle(fontSize: 15),
+                    style: const TextStyle(fontSize: 15),
                     decoration: InputDecoration(
-                        labelText: "Description",
-                        labelStyle: Theme.of(context).textTheme.titleSmall,
-                        contentPadding: const EdgeInsets.symmetric(
-                          vertical: 10,
-                          horizontal: 5,
-                        )),
+                      labelText: "Description",
+                      labelStyle: Theme.of(context).textTheme.titleSmall,
+                      contentPadding: const EdgeInsets.symmetric(
+                        vertical: 10,
+                        horizontal: 5,
+                      ),
+                    ),
                   ),
                 ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  children: [
-                    ElevatedButton(
-                      child: Text("Cancel"),
-                      style: ButtonStyle(
-                          backgroundColor:
-                              MaterialStateProperty.all(Colors.orange[700])),
-                      onPressed: () {
-                        Navigator.of(context).pop();
-                        // Navigator.of(context).pop();
-                      },
-                    ),
-                    ElevatedButton(
-                      child: Text("Update"),
-                      style: ButtonStyle(
-                          backgroundColor:
-                              MaterialStateProperty.all(Colors.green[700])),
-                      onPressed: () {
-                        _saveForm();
-                      },
-                    ),
-                  ],
-                )
+                ButtonsUpdate(_saveForm, 2),
               ],
             ),
           ),

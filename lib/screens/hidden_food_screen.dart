@@ -1,0 +1,34 @@
+//==
+import "package:flutter/material.dart";
+import "package:food_inventory_tracker/provider/food_list.dart";
+import "package:food_inventory_tracker/widgets/mainScreenAppBar/drawer_menu.dart";
+import "package:provider/provider.dart";
+
+class HiddenFoodScreen extends StatelessWidget {
+  static const routName = "/hidden-food-item";
+
+  const HiddenFoodScreen({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text("Hidden Items"),
+        actions: [],
+      ),
+      drawer: DrawerMenu(),
+      body: FutureBuilder(
+        future: Provider.of<FoodItemList>(context, listen: false)
+            .fetchAndSetFoodItemList(),
+        builder: (ctx, snapshot) =>
+            snapshot.connectionState == ConnectionState.waiting
+                ? const Center(
+                    child: CircularProgressIndicator(),
+                  )
+                : Consumer<FoodItemList>(
+                    builder: (context, value, _) => Text("apple"),
+                  ),
+      ),
+    );
+  }
+}

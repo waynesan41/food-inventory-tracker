@@ -4,6 +4,7 @@ import "dart:async";
 import "package:flutter/material.dart";
 import "package:food_inventory_tracker/database/db_helper.dart";
 import "package:food_inventory_tracker/provider/food_list.dart";
+import "package:food_inventory_tracker/screens/add_food_screen.dart";
 import "package:provider/provider.dart";
 import "package:sqflite/sqflite.dart" as sql;
 
@@ -36,12 +37,16 @@ class MainScreen extends StatelessWidget {
                 ? const Center(
                     child: CircularProgressIndicator(),
                   )
-                : FoodCardList(),
+                : Consumer<FoodItemList>(
+                    builder: (context, value, _) => FoodCardList(),
+                  ),
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () {},
         tooltip: 'Increment',
         child: const Icon(Icons.add),
+        onPressed: () {
+          Navigator.of(context).pushNamed(AddFoodScreen.routeName);
+        },
       ),
     );
   }

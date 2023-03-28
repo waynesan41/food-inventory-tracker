@@ -22,7 +22,6 @@ class DBHelper {
 //Create Table Query
   static Future createDB(sql.Database db, int version) async {
     print("###############CREATING DATA BASE FOR FIRST TIME ################");
-
     final tableName = "food_item";
     final idType = "INTEGER PRIMARY KEY AUTOINCREMENT";
     final intTypeNull = "INTEGER NULL";
@@ -50,7 +49,36 @@ class DBHelper {
     return db.rawQuery("SELECT * FROM 'food_item'");
   }
 
+  //=========================================
+  // Adding New Item to Database
+  //=========================================
+  static Future<int> addData(FoodItem newData) async {
+    print("AAAAAAAAAAAAAAAAAAAAADDDDDDDDDDD:");
+    final db = await DBHelper.database();
+
+    final String updateQuery = '''
+    INSERT INTO food_item( 
+    ${FoodItemFields.name},
+    ${FoodItemFields.description},
+    ${FoodItemFields.imgUrl},
+    ${FoodItemFields.addedDate},
+    ${FoodItemFields.expireDate}
+    ) VALUES(?, ?, ?, ?, ?)
+  ''';
+    return await db.rawInsert(updateQuery, [
+      newData.name,
+      newData.description,
+      newData.imgUrl,
+      newData.addedDate.millisecondsSinceEpoch,
+      newData.expireDate == null
+          ? null
+          : newData.expireDate!.millisecondsSinceEpoch,
+    ]);
+  }
+
+  //=========================================
   //UPDATING Database Editing SQFlite Database
+  //=========================================
   static Future<int> updateData(int id, FoodItem updateData) async {
     print("UUUUUUUUUUUUUUUUUUUUPPPPPPPPPPPP:$id");
     final db = await DBHelper.database();
@@ -64,8 +92,7 @@ class DBHelper {
     ${FoodItemFields.expireDate} = ?,
     ${FoodItemFields.hidden} = ?,
     ${FoodItemFields.deleted} = ?
-    
-    WHERE ${FoodItemFields.id} = ?
+    WHERE id = ?
   ''';
     return await db.rawUpdate(updateQuery, [
       updateData.name,
@@ -80,6 +107,8 @@ class DBHelper {
       id
     ]);
   }
+
+  // Initializing Fake Data =====================================================
 
   static Future<void> setInitialData() async {
     print("=============== Innitial Value Set =====================");
@@ -107,7 +136,7 @@ class DBHelper {
           "Mango",
           "Sweet Mango",
           "/data/user/0/com.example.food_inventory_tracker/app_flutter/mango.jpg",
-          ${DateTime.parse("2023-02-11 08:40:04Z").millisecondsSinceEpoch},
+          ${DateTime.parse("2023-02-17 11:40:04Z").millisecondsSinceEpoch},
           ${DateTime.parse("2023-04-21 20:13:04Z").millisecondsSinceEpoch},
           0,
           0
@@ -154,14 +183,12 @@ class DBHelper {
         ),(
           null,
           null,
-          "/data/user/0/com.example.food_inventory_tracker/app_flutter/mango.jpg",
+          null,
           ${DateTime.parse("2023-01-12 05:13:04Z").millisecondsSinceEpoch},
           null,
           0,
           0
         )
-        
-        
         ''');
     print("Inserted $id1");
   } // End Of Initial Data function
