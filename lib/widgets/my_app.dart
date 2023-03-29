@@ -46,7 +46,7 @@ class MyApp extends StatelessWidget {
                   ? MyThemeData.colorSchemaDark
                   : MyThemeData.colorSchemaLight,
             ),
-            home: MainScreen(),
+            home: DeletedScreen(),
             routes: {
               MainScreen.routeName: (ctx) => MainScreen(),
               FoodDetailScreen.routeName: (ctx) => FoodDetailScreen(),

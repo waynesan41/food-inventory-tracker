@@ -36,8 +36,8 @@ class _EditFoodScreenState extends State<EditFoodScreen> {
   DateTime? _addedDate;
   DateTime? _expireDate;
   File? _pickedImage;
-  late bool _deleted;
   late bool _hidden;
+  late DateTime? _deleted;
 
   void _selectImage(File? pickedImage) {
     _pickedImage = pickedImage;
@@ -229,7 +229,7 @@ class _EditFoodScreenState extends State<EditFoodScreen> {
                   margin: const EdgeInsets.symmetric(vertical: 15),
                   child: TextFormField(
                     onChanged: (value) => _description = value,
-                    initialValue: _description,
+                    initialValue: _description ?? "",
                     keyboardType: TextInputType.multiline,
                     maxLines: 4,
                     style: const TextStyle(fontSize: 15),

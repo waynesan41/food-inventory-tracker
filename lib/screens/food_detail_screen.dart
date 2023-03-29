@@ -1,11 +1,18 @@
 //==========
 import "dart:io";
 
+import "package:flutter/gestures.dart";
+import "package:intl/intl.dart";
 import "package:flutter/material.dart";
+import "package:provider/provider.dart";
+
+import "package:food_inventory_tracker/widgets/foodItemDisplay/deleted_option_buttons.dart";
+import "package:food_inventory_tracker/widgets/foodItemDisplay/deleted_top_right_options.dart";
+import "package:food_inventory_tracker/widgets/foodItemDisplay/top_right_options.dart";
+
+import "package:food_inventory_tracker/model/food_item.dart";
 import "package:food_inventory_tracker/widgets/foodItemDisplay/image_full_screen.dart";
 import "package:food_inventory_tracker/widgets/foodItemDisplay/option_buttons.dart";
-import "package:provider/provider.dart";
-import "package:intl/intl.dart";
 
 import "package:food_inventory_tracker/provider/food_list.dart";
 import "package:food_inventory_tracker/screens/edit_food_screen.dart";
@@ -16,126 +23,126 @@ class FoodDetailScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final foodId = ModalRoute.of(context)?.settings.arguments as int;
-    final foodDetail =
-        Provider.of<FoodItemList>(context).foodDetailById(foodId);
-    return Scaffold(
-      appBar: AppBar(
-        title: Text("${foodDetail.name ?? "No Name"}"),
-        actions: [
-          IconButton(
-            onPressed: () {},
-            icon: const Icon(Icons.delete),
-          ),
-          IconButton(
-            onPressed: () {},
-            icon: const Icon(Icons.security_outlined),
-          ),
-          IconButton(
-            onPressed: () {
-              Navigator.of(context)
-                  .pushNamed(EditFoodScreen.routName, arguments: foodDetail);
-            },
-            icon: const Icon(Icons.edit),
-          )
-        ],
-      ),
-      body: SingleChildScrollView(
-        child: Container(
-          padding: const EdgeInsets.symmetric(
-            vertical: 10,
-            horizontal: 10,
-          ),
-          child: Column(
-            children: [
-              Text(
-                "${foodDetail.name ?? "No Name"}",
-                style: Theme.of(context).textTheme.titleMedium,
-              ),
-              Divider(
-                color: Theme.of(context).colorScheme.secondary,
-                height: 10,
-              ),
-              Container(
-                  child: Column(
-                children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(
-                        "Added Date (${DateTime.now().difference(foodDetail.addedDate).inDays.toString()} days ago)",
-                        style: Theme.of(context).textTheme.titleSmall,
-                      ),
-                      Text(
-                        "Expire Date",
-                        style: Theme.of(context).textTheme.titleSmall,
-                      ),
-                    ],
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(
-                          "${DateFormat.yMd().add_jm().format(foodDetail.addedDate)}"),
-                      Text(
-                          "${foodDetail.expireDate != null ? DateFormat.yMd().format(foodDetail.expireDate!) : "Not Added"}"),
-                    ],
-                  ),
-                ],
-              )),
-              Container(
-                margin: const EdgeInsets.only(top: 5),
-                child: OptionButtons(foodDetail),
-              ),
-              Container(
-                width: double.infinity,
-                margin: const EdgeInsets.symmetric(vertical: 10, horizontal: 0),
-                // child: InteractiveViewer(
-                //   constrained: true,
-                child: foodDetail.imgUrl == null
-                    ? Image(
-                        image: AssetImage('assets/images/noimage.jpg'),
-                      )
-                    : GestureDetector(
-                        onTap: () {
-                          Navigator.push(context,
-                              MaterialPageRoute(builder: (_) {
-                            return ImageFullScreen(foodDetail.imgUrl);
-                          }));
-                        },
-                        child: Hero(
-                          tag: "imageHero",
-                          child: Image.file(
-                            File(foodDetail.imgUrl.toString()),
-                            fit: BoxFit.contain,
-                          ),
-                        ),
-                      ),
+    final foodId = ModalRoute.of(
+      context,
+    )?.settings.arguments as FoodItem;
+    final foodDetail = foodId.deleted == null
+        ? Provider.of<FoodItemList>(context).foodDetailById(foodId.id)
+        : Provider.of<FoodItemList>(context).deletedFoodById(foodId.id);
 
-                // ),
-              ),
-              Container(
-                margin: EdgeInsets.only(
-                  bottom: 10,
+    return foodDetail.id == -1
+        ? const Text("nothing")
+        : Scaffold(
+            appBar: AppBar(
+              title: Text("${foodDetail.name ?? "No Name"}"),
+              actions: [
+                foodDetail.deleted == null
+                    ? TopRightOptions(foodDetail)
+                    : DeletedTopRightOption(foodDetail)
+              ],
+            ),
+            body: SingleChildScrollView(
+              child: Container(
+                padding: const EdgeInsets.symmetric(
+                  vertical: 10,
+                  horizontal: 10,
                 ),
                 child: Column(
                   children: [
-                    Container(
-                      margin: const EdgeInsets.only(bottom: 5),
-                      child: Text(
-                        "Description",
-                        style: Theme.of(context).textTheme.titleSmall,
-                      ),
+                    Text(
+                      "${foodDetail.name ?? "No Name"}",
+                      style: Theme.of(context).textTheme.titleMedium,
                     ),
-                    Text("${foodDetail.description ?? "No Description"}"),
-                    Text("${foodDetail.imgUrl ?? "No Image"}")
+                    Divider(
+                      color: Theme.of(context).colorScheme.secondary,
+                      height: 10,
+                    ),
+                    Container(
+                        child: Column(
+                      children: [
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text(
+                              "Added Date (${DateTime.now().difference(foodDetail.addedDate).inDays.toString()} days ago)",
+                              style: Theme.of(context).textTheme.titleSmall,
+                            ),
+                            Text(
+                              "Expire Date",
+                              style: Theme.of(context).textTheme.titleSmall,
+                            ),
+                          ],
+                        ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text(
+                                "${DateFormat.yMd().add_jm().format(foodDetail.addedDate)}"),
+                            Text(
+                                "${foodDetail.expireDate != null ? DateFormat.yMd().format(foodDetail.expireDate!) : "Not Added"}"),
+                          ],
+                        ),
+                      ],
+                    )),
+                    Container(
+                      margin: const EdgeInsets.only(top: 5),
+                      child: foodDetail.deleted == null
+                          ? OptionButtons(foodDetail)
+                          : DeletedOptionButtons(foodDetail),
+                    ),
+                    Container(
+                      width: double.infinity,
+                      margin: const EdgeInsets.symmetric(
+                          vertical: 10, horizontal: 0),
+                      // child: InteractiveViewer(
+                      //   constrained: true,
+                      child: foodDetail.imgUrl == null
+                          ? Image(
+                              image: AssetImage('assets/images/noimage.jpg'),
+                            )
+                          : GestureDetector(
+                              onTap: () {
+                                Navigator.push(context,
+                                    MaterialPageRoute(builder: (_) {
+                                  return ImageFullScreen(foodDetail.imgUrl);
+                                }));
+                              },
+                              child: Hero(
+                                tag: "imageHero",
+                                child: Image.file(
+                                  File(foodDetail.imgUrl.toString()),
+                                  fit: BoxFit.contain,
+                                ),
+                              ),
+                            ),
+
+                      // ),
+                    ),
+                    Container(
+                      margin: EdgeInsets.only(
+                        bottom: 10,
+                      ),
+                      child: Column(
+                        children: [
+                          Container(
+                            margin: const EdgeInsets.only(bottom: 5),
+                            child: Text(
+                              "Description",
+                              style: Theme.of(context).textTheme.titleSmall,
+                            ),
+                          ),
+                          Text("${foodDetail.description ?? "No Description"}"),
+
+                          //=====
+                          Text("${foodDetail.deleted ?? "Not DELETED"}"),
+                          Text("${foodDetail.imgUrl ?? "No Image"}")
+                        ],
+                      ),
+                    )
                   ],
                 ),
-              )
-            ],
-          ),
-        ),
-      ),
-    );
+              ),
+            ),
+          );
   }
 }

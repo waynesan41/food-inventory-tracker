@@ -12,14 +12,14 @@ class FoodItemFields {
 }
 
 class FoodItem with ChangeNotifier {
-  final int id;
+  int id;
   String? name;
   String? description;
   String? imgUrl;
-  final DateTime addedDate;
+  DateTime addedDate;
   DateTime? expireDate;
-  final bool hidden;
-  final bool deleted;
+  bool hidden;
+  DateTime? deleted;
 
   FoodItem({
     required this.id,
@@ -29,6 +29,6 @@ class FoodItem with ChangeNotifier {
     required this.addedDate,
     this.expireDate,
     this.hidden = false,
-    this.deleted = false,
+    this.deleted,
   });
 }

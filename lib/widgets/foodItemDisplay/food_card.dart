@@ -13,9 +13,10 @@ class FoodCard extends StatelessWidget {
     final foodOne = Provider.of<FoodItem>(context, listen: false);
     return GestureDetector(
       onTap: () {
+        print(foodOne.id);
         Navigator.of(context).pushNamed(
           FoodDetailScreen.routeName,
-          arguments: foodOne.id,
+          arguments: foodOne,
         );
       },
       child: ClipRRect(
