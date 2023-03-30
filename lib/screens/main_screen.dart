@@ -45,7 +45,8 @@ class MainScreen extends StatelessWidget {
         tooltip: 'Increment',
         child: const Icon(Icons.add),
         onPressed: () {
-          Navigator.of(context).pushNamed(AddFoodScreen.routeName);
+          Navigator.of(context)
+              .pushNamed(AddFoodScreen.routeName, arguments: false);
         },
       ),
     );

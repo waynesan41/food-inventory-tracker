@@ -26,9 +26,15 @@ class FoodDetailScreen extends StatelessWidget {
     final foodId = ModalRoute.of(
       context,
     )?.settings.arguments as FoodItem;
-    final foodDetail = foodId.deleted == null
-        ? Provider.of<FoodItemList>(context).foodDetailById(foodId.id)
-        : Provider.of<FoodItemList>(context).deletedFoodById(foodId.id);
+    late FoodItem foodDetail;
+    if (foodId.deleted == null) {
+      foodDetail = foodId.hidden
+          ? Provider.of<FoodItemList>(context).hiddenFoodById(foodId.id)
+          : Provider.of<FoodItemList>(context).foodDetailById(foodId.id);
+    } else {
+      foodDetail =
+          Provider.of<FoodItemList>(context).deletedFoodById(foodId.id);
+    }
 
     return foodDetail.id == -1
         ? const Text("nothing")
@@ -54,8 +60,13 @@ class FoodDetailScreen extends StatelessWidget {
                       style: Theme.of(context).textTheme.titleMedium,
                     ),
                     Divider(
-                      color: Theme.of(context).colorScheme.secondary,
-                      height: 10,
+                      color: foodDetail.deleted != null
+                          ? Theme.of(context).colorScheme.error
+                          : foodDetail.hidden
+                              ? const Color.fromARGB(255, 144, 202, 249)
+                              : Theme.of(context).colorScheme.secondary,
+                      height: 15,
+                      thickness: 3,
                     ),
                     Container(
                         child: Column(

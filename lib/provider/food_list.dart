@@ -9,9 +9,36 @@ class FoodItemList with ChangeNotifier {
   List<FoodItem> _foodItemList = [];
   List<FoodItem> _deletedItem = [];
   List<FoodItem> _hiddenItem = [];
+  String? _search;
+  String? _searchHide;
+
+  void setSearch(String? searchControl) {
+    _search = searchControl;
+    notifyListeners();
+  }
+
+  void setSearchHide(String? searchControl) {
+    _searchHide = searchControl;
+    notifyListeners();
+  }
+
+  String? get getSearch {
+    return _search;
+  }
+
+  String? get getSearchHide {
+    return _searchHide;
+  }
 
   List<FoodItem> get foodItemList {
-    return [..._foodItemList];
+    return _foodItemList.where((element) {
+      if (_search == null) return true;
+      if (element.name != null) {
+        return element.name!.toLowerCase().contains(_search!.toLowerCase());
+      } else {
+        return false;
+      }
+    }).toList();
   }
 
   List<FoodItem> get deletedFoodItemList {
@@ -19,7 +46,14 @@ class FoodItemList with ChangeNotifier {
   }
 
   List<FoodItem> get hiddenItemList {
-    return [..._hiddenItem];
+    return _hiddenItem.where((element) {
+      if (_searchHide == null) return true;
+      if (element.name != null) {
+        return element.name!.toLowerCase().contains(_searchHide!.toLowerCase());
+      } else {
+        return false;
+      }
+    }).toList();
   }
 
   // Get Sorted Food ==============================================
@@ -89,10 +123,10 @@ class FoodItemList with ChangeNotifier {
     );
   }
 
-  Future<void> fetchAndSetHide() async {
-    await DBHelper.getDeletedData().then(
+  Future<void> fetchAndSetHiddenFoodItemList() async {
+    await DBHelper.getHiddedData().then(
       (value) {
-        _deletedItem = value.map(
+        _hiddenItem = value.map(
           (item) {
             print(item);
             return FoodItem(
@@ -145,8 +179,13 @@ class FoodItemList with ChangeNotifier {
     final result = await DBHelper.updateData(id, updatedFood);
     print("RESULTT: $result");
     if (result == 1) {
-      final prodIndex = _foodItemList.indexWhere((prod) => prod.id == id);
-      _foodItemList[prodIndex] = updatedFood;
+      if (updatedFood.hidden) {
+        final prodIndex = _hiddenItem.indexWhere((prod) => prod.id == id);
+        _hiddenItem[prodIndex] = updatedFood;
+      } else {
+        final prodIndex = _foodItemList.indexWhere((prod) => prod.id == id);
+        _foodItemList[prodIndex] = updatedFood;
+      }
 
       notifyListeners();
     }
@@ -164,8 +203,11 @@ class FoodItemList with ChangeNotifier {
       imgUrl: newFood.imgUrl,
       addedDate: newFood.addedDate,
       expireDate: newFood.expireDate,
+      hidden: newFood.hidden,
     );
-    _foodItemList.insert(0, insertFood);
+    newFood.hidden
+        ? _hiddenItem.insert(0, insertFood)
+        : _foodItemList.insert(0, insertFood);
     notifyListeners();
   }
 
@@ -177,10 +219,14 @@ class FoodItemList with ChangeNotifier {
     final result = await DBHelper.updateDelete(deleteFood);
 
     if (deleteFood.deleted == null) {
-      _foodItemList.insert(0, deleteFood);
+      deleteFood.hidden
+          ? _hiddenItem.insert(0, deleteFood)
+          : _foodItemList.insert(0, deleteFood);
       _deletedItem.remove(deleteFood);
     } else {
-      _foodItemList.remove(deleteFood);
+      deleteFood.hidden
+          ? _hiddenItem.remove(deleteFood)
+          : _foodItemList.remove(deleteFood);
       _deletedItem.add(deleteFood);
     }
     notifyListeners();
@@ -222,8 +268,23 @@ class FoodItemList with ChangeNotifier {
     notifyListeners();
     return;
   }
+
   // =====================================================
   // ============== Hidding  Section =====================
   // =====================================================
   // Hidding Item ======================================================
-}
+  Future<void> hideItemUpdate(FoodItem hideFood) async {
+    final result = await DBHelper.hideItemData(hideFood);
+
+    if (result == 1) {
+      if (hideFood.hidden) {
+        _foodItemList.remove(hideFood);
+        _hiddenItem.insert(0, hideFood);
+      } else {
+        _foodItemList.insert(0, hideFood);
+        _hiddenItem.remove(hideFood);
+      }
+      notifyListeners();
+    }
+  }
+} // End of Food List [DON'T DELETE]

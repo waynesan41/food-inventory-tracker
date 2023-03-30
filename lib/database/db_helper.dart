@@ -47,15 +47,25 @@ class DBHelper {
     );
   }
 
-  // Getting All Food Data
+  //=========================================
+  // GETTING DATA
+  //=========================================
   static Future<List<Map<String, dynamic>>> getData() async {
     final db = await DBHelper.database();
-    return db.rawQuery("SELECT * FROM 'food_item' WHERE deleted IS NULL");
+    return db.rawQuery(
+        "SELECT * FROM 'food_item' WHERE ${FoodItemFields.hidden} = 0 AND ${FoodItemFields.deleted} IS NULL ORDER BY addedDate");
   }
 
   static Future<List<Map<String, dynamic>>> getDeletedData() async {
     final db = await DBHelper.database();
-    return db.rawQuery("SELECT * FROM 'food_item' WHERE deleted IS NOT NULL");
+    return db.rawQuery(
+        "SELECT * FROM 'food_item' WHERE ${FoodItemFields.deleted} IS NOT NULL");
+  }
+
+  static Future<List<Map<String, dynamic>>> getHiddedData() async {
+    final db = await DBHelper.database();
+    return db.rawQuery(
+        "SELECT * FROM 'food_item' WHERE ${FoodItemFields.hidden} = 1 AND ${FoodItemFields.deleted} IS NULL");
   }
 
   //=========================================
@@ -71,8 +81,10 @@ class DBHelper {
     ${FoodItemFields.description},
     ${FoodItemFields.imgUrl},
     ${FoodItemFields.addedDate},
-    ${FoodItemFields.expireDate}
-    ) VALUES(?, ?, ?, ?, ?)
+    ${FoodItemFields.expireDate},
+    ${FoodItemFields.hidden}
+    
+    ) VALUES(?, ?, ?, ?, ?, ?)
   ''';
     return await db.rawInsert(updateQuery, [
       newData.name,
@@ -82,6 +94,7 @@ class DBHelper {
       newData.expireDate == null
           ? null
           : newData.expireDate!.millisecondsSinceEpoch,
+      newData.hidden ? 1 : 0,
     ]);
   }
 
@@ -114,7 +127,6 @@ class DBHelper {
     final String updateQuery = '''
     DELETE FROM food_item WHERE id = ?
   ''';
-
     return await db.rawDelete(updateQuery, [deleteFood.id]);
   }
 
@@ -149,6 +161,24 @@ class DBHelper {
           ? null
           : updateData.expireDate!.millisecondsSinceEpoch,
       id
+    ]);
+  }
+
+  //=========================================
+  // Hiding Food Item, Update data.=========
+  //=========================================
+  static Future<int> hideItemData(FoodItem updateData) async {
+    print("HHHHHHHHHHHHHHHHHHHHHH:${updateData.id}");
+    final db = await DBHelper.database();
+
+    final String updateQuery = '''
+    UPDATE food_item SET 
+    ${FoodItemFields.hidden} = ? 
+    WHERE id = ?
+  ''';
+    return await db.rawUpdate(updateQuery, [
+      updateData.hidden ? 1 : 0,
+      updateData.id,
     ]);
   }
 
@@ -198,7 +228,7 @@ class DBHelper {
           "/data/user/0/com.example.food_inventory_tracker/app_flutter/chickenheart.jpg",
           ${DateTime.parse("2023-01-21 20:13:04Z").millisecondsSinceEpoch},
           null,
-          0,
+          1,
           null
         ),(
           "Tuna Fish",
@@ -214,7 +244,7 @@ class DBHelper {
           "/data/user/0/com.example.food_inventory_tracker/app_flutter/ramen.jpg",
           ${DateTime.parse("2021-01-21 20:13:04Z").millisecondsSinceEpoch},
           ${DateTime.parse("2023-04-21 20:13:04Z").millisecondsSinceEpoch},
-          0,
+          1,
           null
         ),(
           "Onion",
@@ -222,7 +252,7 @@ class DBHelper {
           "/data/user/0/com.example.food_inventory_tracker/app_flutter/onion.jpg",
           ${DateTime.parse("2022-11-21 21:13:04Z").millisecondsSinceEpoch},
           null,
-          0,
+          1,
           null
         ),(
           null,

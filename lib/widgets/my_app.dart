@@ -29,6 +29,7 @@ class MyApp extends StatelessWidget {
       ],
       child: Consumer<OptionData>(builder: (ctx, optData, _) {
         return MaterialApp(
+            debugShowCheckedModeBanner: false,
             title: 'Food Inventory Tracker',
             theme: ThemeData(
               textTheme: MyThemeData.textTheme,
@@ -46,7 +47,7 @@ class MyApp extends StatelessWidget {
                   ? MyThemeData.colorSchemaDark
                   : MyThemeData.colorSchemaLight,
             ),
-            home: DeletedScreen(),
+            home: HiddenFoodScreen(),
             routes: {
               MainScreen.routeName: (ctx) => MainScreen(),
               FoodDetailScreen.routeName: (ctx) => FoodDetailScreen(),

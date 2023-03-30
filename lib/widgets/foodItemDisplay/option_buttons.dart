@@ -3,6 +3,7 @@ import 'package:food_inventory_tracker/model/food_item.dart';
 import 'package:food_inventory_tracker/provider/food_list.dart';
 import 'package:food_inventory_tracker/screens/edit_food_screen.dart';
 import 'package:food_inventory_tracker/widgets/dialogs/delete_dialog.dart';
+import 'package:food_inventory_tracker/widgets/dialogs/hide_item_dialog.dart';
 import 'package:provider/provider.dart';
 
 class OptionButtons extends StatelessWidget {
@@ -56,9 +57,15 @@ class OptionButtons extends StatelessWidget {
           ),
           child: IconButton(
             color: const Color.fromARGB(255, 144, 202, 249),
-            icon: const Icon(Icons.security),
-            onPressed: () {
+            icon: _foodDetail.hidden
+                ? const Icon(Icons.unarchive_outlined)
+                : const Icon(Icons.security),
+            onPressed: () async {
               //Hide Item
+              return showDialog(
+                context: context,
+                builder: (context) => HideItemDialog(_foodDetail),
+              );
             },
           ),
         ),

@@ -4,19 +4,20 @@ import 'package:provider/provider.dart';
 import 'package:food_inventory_tracker/provider/food_list.dart';
 import 'package:food_inventory_tracker/widgets/foodItemDisplay/food_card.dart';
 
-class FoodCardList extends StatelessWidget {
-  const FoodCardList({super.key});
+class HiddenFoodCardList extends StatelessWidget {
+  const HiddenFoodCardList({super.key});
 
   @override
   Widget build(BuildContext context) {
     final foodItemData = Provider.of<FoodItemList>(context, listen: false);
-    final foodItems = foodItemData.foodItemList;
+    final foodItems = foodItemData.hiddenItemList;
 
     return RefreshIndicator(
-      onRefresh: Provider.of<FoodItemList>(context).fetchAndSetFoodItemList,
+      onRefresh:
+          Provider.of<FoodItemList>(context).fetchAndSetHiddenFoodItemList,
       child: foodItems.length == 0
           ? Center(
-              child: const Text("No Food Item Found..."),
+              child: const Text("No Hidden Food Item Found..."),
             )
           : GridView.builder(
               padding: const EdgeInsets.all(10.0),

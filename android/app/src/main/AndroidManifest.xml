@@ -1,7 +1,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.food_inventory_tracker">
    <application
-        android:label="food_inventory_tracker"
+        android:label="Food Inventory Tracker"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
         <activity

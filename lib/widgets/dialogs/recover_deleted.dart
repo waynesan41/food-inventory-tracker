@@ -27,7 +27,10 @@ class RecoverDialog extends StatelessWidget {
               Colors.green[600],
             ),
           ),
-          child: const Text("Cancel"),
+          child: const Text(
+            "Cancel",
+            style: TextStyle(color: Colors.white),
+          ),
           onPressed: () {
             Navigator.of(context).pop(false);
           },
@@ -38,7 +41,7 @@ class RecoverDialog extends StatelessWidget {
               Colors.blue[600],
             ),
           ),
-          child: const Text("Recover"),
+          child: const Text("Recover", style: TextStyle(color: Colors.white)),
           onPressed: () {
             _recoverDelete();
             Navigator.of(context).pop();

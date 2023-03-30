@@ -27,7 +27,10 @@ class _DeleteAllDialogState extends State<DeleteAllDialog> {
               Colors.green[600],
             ),
           ),
-          child: const Text("Cancel"),
+          child: const Text(
+            "Cancel",
+            style: TextStyle(color: Colors.white),
+          ),
           onPressed: () {
             Navigator.of(context).pop(false);
           },
@@ -38,7 +41,10 @@ class _DeleteAllDialogState extends State<DeleteAllDialog> {
               Colors.red[600],
             ),
           ),
-          child: const Text("DELETE ALL"),
+          child: const Text(
+            "DELETE ALL",
+            style: TextStyle(color: Colors.white),
+          ),
           onPressed: () {
             setState(() {
               loading = true;

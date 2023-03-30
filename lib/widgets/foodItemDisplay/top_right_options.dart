@@ -33,7 +33,9 @@ class TopRightOptions extends StatelessWidget {
           },
         ),
         IconButton(
-          icon: const Icon(Icons.security_outlined),
+          icon: _foodDetail.hidden
+              ? const Icon(Icons.unarchive_outlined)
+              : const Icon(Icons.security_outlined),
           onPressed: () async {
             //Hidding Item
             return showDialog(

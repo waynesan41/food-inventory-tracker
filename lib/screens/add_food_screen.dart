@@ -15,7 +15,9 @@ import "package:food_inventory_tracker/widgets/editAddFootItem/edit_appbar.dart"
 
 class AddFoodScreen extends StatefulWidget {
   const AddFoodScreen({super.key});
+
   static const routeName = "/add-food-item";
+
   @override
   State<AddFoodScreen> createState() => _AddFoodScreenState();
 }
@@ -29,6 +31,7 @@ class _AddFoodScreenState extends State<AddFoodScreen> {
   String? _description;
   DateTime? _addedDate;
   DateTime? _expireDate;
+  bool _hidden = false;
   File? _pickedImage;
 
   void _selectImage(File? pickedImage) {
@@ -85,6 +88,7 @@ class _AddFoodScreenState extends State<AddFoodScreen> {
       imgUrl: _imgUrl,
       addedDate: DateTime.now(),
       expireDate: _expireDate,
+      hidden: _hidden!,
     );
 
     Provider.of<FoodItemList>(context, listen: false).addFoodItem(newFood);
@@ -98,11 +102,12 @@ class _AddFoodScreenState extends State<AddFoodScreen> {
 
   @override
   Widget build(BuildContext context) {
+    _hidden = ModalRoute.of(context)!.settings.arguments as bool;
     return Scaffold(
       appBar: AppBar(
           title: _isLoading
               ? const CircularProgressIndicator()
-              : const Text("Add New Item"),
+              : Text("${_hidden ? "Add New Hidden Item" : "Add New Item"}"),
           actions: [
             EditAppBar(_isLoading, _saveForm),
           ]),

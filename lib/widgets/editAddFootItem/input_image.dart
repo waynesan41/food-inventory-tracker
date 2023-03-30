@@ -126,7 +126,9 @@ class ImageInputState extends State<ImageInput> {
                     radius: 30,
                     backgroundColor: Theme.of(context).colorScheme.primary,
                     child: IconButton(
-                      icon: const Icon(Icons.image_outlined),
+                      icon: const Icon(
+                        Icons.image_outlined,
+                      ),
                       onPressed: () {
                         _getGallaryPhoto();
                       },
@@ -156,7 +158,9 @@ class ImageInputState extends State<ImageInput> {
                                           Colors.green[600],
                                         ),
                                       ),
-                                      child: const Text("Cancel"),
+                                      child: const Text("Cancel",
+                                          style:
+                                              TextStyle(color: Colors.white)),
                                       onPressed: () {
                                         Navigator.of(ctx).pop(false);
                                       },
@@ -168,7 +172,9 @@ class ImageInputState extends State<ImageInput> {
                                           Colors.red[600],
                                         ),
                                       ),
-                                      child: const Text("DELETE"),
+                                      child: const Text("DELETE",
+                                          style:
+                                              TextStyle(color: Colors.white)),
                                       onPressed: () {
                                         setState(() {
                                           widget.onSelectImage(null);

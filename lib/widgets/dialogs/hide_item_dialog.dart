@@ -13,14 +13,18 @@ class HideItemDialog extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     void _hideItem() {
-      _foodDetail.hidden = true;
+      _foodDetail.hidden = !_foodDetail.hidden;
       Provider.of<FoodItemList>(context, listen: false)
-          .updateDeleteFoodItem(_foodDetail);
+          .hideItemUpdate(_foodDetail);
     }
 
     return AlertDialog(
-      title: const Text("Hide this Item!"),
-      content: const Text("Hidden item can be found in hidden tab."),
+      title: _foodDetail.hidden
+          ? const Text("Reveal this Item")
+          : const Text("Hide this Item!"),
+      content: _foodDetail.hidden
+          ? const Text("Move Item back to main inventory.")
+          : const Text("Hidden item can be found in hidden tab."),
       actions: [
         TextButton(
           style: ButtonStyle(
@@ -28,7 +32,10 @@ class HideItemDialog extends StatelessWidget {
               Colors.green[600],
             ),
           ),
-          child: const Text("Cancel"),
+          child: const Text(
+            "Cancel",
+            style: TextStyle(color: Colors.white),
+          ),
           onPressed: () {
             Navigator.of(context).pop(false);
           },
@@ -36,14 +43,16 @@ class HideItemDialog extends StatelessWidget {
         TextButton(
           style: ButtonStyle(
             backgroundColor: MaterialStateProperty.all(
-              Colors.red[600],
+              Colors.blue,
             ),
           ),
-          child: const Text("Hide Item"),
+          child: _foodDetail.hidden
+              ? const Text("Reveal Item", style: TextStyle(color: Colors.white))
+              : const Text("Hide Item", style: TextStyle(color: Colors.white)),
           onPressed: () {
-            // _hideItem();
-            // Navigator.of(context).pop();
-            // Navigator.of(context).pop();
+            _hideItem();
+            Navigator.of(context).pop();
+            Navigator.of(context).pop();
           },
         ),
       ],

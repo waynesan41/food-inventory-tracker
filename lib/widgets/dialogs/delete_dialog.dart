@@ -27,7 +27,10 @@ class DeleteDialog extends StatelessWidget {
               Colors.green[600],
             ),
           ),
-          child: const Text("Cancel"),
+          child: const Text(
+            "Cancel",
+            style: TextStyle(color: Colors.white),
+          ),
           onPressed: () {
             Navigator.of(context).pop(false);
           },
@@ -38,7 +41,7 @@ class DeleteDialog extends StatelessWidget {
               Colors.red[600],
             ),
           ),
-          child: const Text("DELETE"),
+          child: const Text("DELETE", style: TextStyle(color: Colors.white)),
           onPressed: () {
             _deleteItem();
             Navigator.of(context).pop();

@@ -19,10 +19,11 @@ class DeletedScreen extends StatelessWidget {
         title: Text("Deleted Items"),
         actions: [
           Container(
-            margin: const EdgeInsets.symmetric(vertical: 6),
+            margin: const EdgeInsets.only(top: 6, bottom: 6, right: 6),
             child: ElevatedButton.icon(
               style: ButtonStyle(
-                backgroundColor: MaterialStateProperty.all(Colors.amber),
+                backgroundColor:
+                    MaterialStateProperty.all(Color.fromARGB(255, 202, 36, 24)),
               ),
               icon: const Icon(Icons.delete_forever_outlined),
               label: const Text("Delete All"),
