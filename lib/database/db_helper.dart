@@ -8,10 +8,7 @@ import 'package:sqflite/sqlite_api.dart';
 class DBHelper {
   static Future<Database> database() async {
     final dbPath = await sql.getDatabasesPath();
-    print("@@@@ DATABASE HELPER @@@@@@");
-    print(dbPath);
     final String myDBPath = join(dbPath, "foodInventory.db");
-    print(myDBPath);
 
     return await sql.openDatabase(
       myDBPath,
@@ -22,12 +19,11 @@ class DBHelper {
 
 //Create Table Query
   static Future createDB(sql.Database db, int version) async {
-    print("###############CREATING DATA BASE FOR FIRST TIME ################");
-    final tableName = "food_item";
-    final idType = "INTEGER PRIMARY KEY AUTOINCREMENT";
-    final intTypeNull = "INTEGER NULL";
-    final textTypeNull = "TEXT NULL";
-    final boolType = "BOOLEAN NOT NULL DEFAULT 0";
+    const tableName = "food_item";
+    const idType = "INTEGER PRIMARY KEY AUTOINCREMENT";
+    const intTypeNull = "INTEGER NULL";
+    const textTypeNull = "TEXT NULL";
+    const boolType = "BOOLEAN NOT NULL DEFAULT 0";
 
     await db.execute('''
       CREATE TABLE $tableName (
@@ -42,37 +38,56 @@ class DBHelper {
       )
     ''').then(
       (value) {
-        setInitialData();
+        // setInitialData();
       },
     );
   }
 
+  static List<String> sortOrder = [
+    " ${FoodItemFields.addedDate} ASC",
+    " ${FoodItemFields.addedDate} DESC",
+    " ${FoodItemFields.expireDate} IS NULL, ${FoodItemFields.expireDate} ASC",
+    " ${FoodItemFields.expireDate} DESC",
+  ];
   //=========================================
   // GETTING DATA
   //=========================================
-  static Future<List<Map<String, dynamic>>> getData() async {
+
+  static Future<List<Map<String, dynamic>>> getData(int? sortType) async {
     final db = await DBHelper.database();
-    return db.rawQuery(
-        "SELECT * FROM 'food_item' WHERE ${FoodItemFields.hidden} = 0 AND ${FoodItemFields.deleted} IS NULL ORDER BY addedDate");
+
+    String query = '''
+      SELECT * FROM 'food_item' 
+      WHERE ${FoodItemFields.hidden} = 0 
+      AND ${FoodItemFields.deleted} IS NULL 
+      ORDER BY ${sortOrder[sortType!]}
+    ''';
+    return db.rawQuery(query);
   }
 
   static Future<List<Map<String, dynamic>>> getDeletedData() async {
     final db = await DBHelper.database();
     return db.rawQuery(
-        "SELECT * FROM 'food_item' WHERE ${FoodItemFields.deleted} IS NOT NULL");
+        "SELECT * FROM 'food_item' WHERE ${FoodItemFields.deleted} IS NOT NULL ORDER BY ${FoodItemFields.deleted} DESC");
   }
 
-  static Future<List<Map<String, dynamic>>> getHiddedData() async {
+  static Future<List<Map<String, dynamic>>> getHiddedData(int? sortType) async {
     final db = await DBHelper.database();
-    return db.rawQuery(
-        "SELECT * FROM 'food_item' WHERE ${FoodItemFields.hidden} = 1 AND ${FoodItemFields.deleted} IS NULL");
+
+    String query = '''
+        SELECT * FROM 'food_item' 
+        WHERE ${FoodItemFields.hidden} = 1 
+        AND ${FoodItemFields.deleted} IS NULL 
+        ORDER BY ${sortOrder[sortType!]}
+    ''';
+
+    return db.rawQuery(query);
   }
 
   //=========================================
   // Adding New Item to Database
   //=========================================
   static Future<int> addData(FoodItem newData) async {
-    print("AAAAAAAAAAAAAAAAAAAAADDDDDDDDDDD:");
     final db = await DBHelper.database();
 
     final String updateQuery = '''
@@ -102,7 +117,6 @@ class DBHelper {
   // Update Delete in Database
   //=========================================
   static Future<int> updateDelete(FoodItem updateData) async {
-    print("UUUUUUUUUUUUUUUUUUUUPPPPPPPPPPPP:${updateData.id}");
     final db = await DBHelper.database();
 
     final String updateQuery = '''
@@ -122,9 +136,8 @@ class DBHelper {
   // Update Delete in Database
   //=========================================
   static Future<int> deleteCompleteData(FoodItem deleteFood) async {
-    print("XXXXXXXXXXXXXX:${deleteFood.id}");
     final db = await DBHelper.database();
-    final String updateQuery = '''
+    const String updateQuery = '''
     DELETE FROM food_item WHERE id = ?
   ''';
     return await db.rawDelete(updateQuery, [deleteFood.id]);
@@ -134,7 +147,6 @@ class DBHelper {
   //UPDATING Database Editing SQFlite Database
   //=========================================
   static Future<int> updateData(int id, FoodItem updateData) async {
-    print("UUUUUUUUUUUUUUUUUUUUPPPPPPPPPPPP:$id");
     final db = await DBHelper.database();
 
     final String updateQuery = '''
@@ -168,7 +180,6 @@ class DBHelper {
   // Hiding Food Item, Update data.=========
   //=========================================
   static Future<int> hideItemData(FoodItem updateData) async {
-    print("HHHHHHHHHHHHHHHHHHHHHH:${updateData.id}");
     final db = await DBHelper.database();
 
     final String updateQuery = '''
@@ -182,6 +193,30 @@ class DBHelper {
     ]);
   }
 
+  static Future<List<int>> getStats() async {
+    List<int> data = [];
+    final myDB = await DBHelper.database();
+    String inventoryQuery =
+        "SELECT COUNT(${FoodItemFields.id}) AS ${FoodItemFields.id} FROM food_item WHERE ${FoodItemFields.deleted} IS NULL AND ${FoodItemFields.hidden} = 0";
+    String hiddenQuery =
+        "SELECT COUNT(${FoodItemFields.hidden}) AS ${FoodItemFields.hidden} FROM food_item WHERE ${FoodItemFields.deleted} IS NULL AND ${FoodItemFields.hidden} = 1";
+    String deleteQuery =
+        "SELECT COUNT(${FoodItemFields.deleted}) AS ${FoodItemFields.deleted} FROM food_item WHERE ${FoodItemFields.deleted} IS NOT NULL";
+    String imgUrlQuery =
+        "SELECT COUNT(${FoodItemFields.imgUrl}) AS ${FoodItemFields.imgUrl} FROM food_item WHERE ${FoodItemFields.imgUrl} IS NOT NULL";
+
+    final inventRes = await myDB.rawQuery(inventoryQuery);
+    final hiddenRes = await myDB.rawQuery(hiddenQuery);
+    final deleteRes = await myDB.rawQuery(deleteQuery);
+    final imgUrlRes = await myDB.rawQuery(imgUrlQuery);
+
+    data.add(inventRes[0][FoodItemFields.id] as int);
+    data.add(hiddenRes[0][FoodItemFields.hidden] as int);
+    data.add(deleteRes[0][FoodItemFields.deleted] as int);
+    data.add(imgUrlRes[0][FoodItemFields.imgUrl] as int);
+
+    return data;
+  }
   // Initializing Fake Data =====================================================
 
   static Future<void> setInitialData() async {

@@ -50,11 +50,21 @@ class FoodCard extends StatelessWidget {
                       ? Text("")
                       : Text(foodOne.name.toString()),
                 ),
-                Container(
-                  alignment: Alignment.topLeft,
-                  child: Text(
-                      "Days: ${DateTime.now().difference(foodOne.addedDate).inDays.toString()}"),
-                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Container(
+                      alignment: Alignment.topLeft,
+                      child: Text(
+                          "Days: ${DateTime.now().difference(foodOne.addedDate).inDays.toString()}"),
+                    ),
+                    Container(
+                      alignment: Alignment.topRight,
+                      child: Text(
+                          "Expire:${foodOne.expireDate == null ? "NA" : foodOne.expireDate!.difference(DateTime.now()).inDays.toString()}"),
+                    ),
+                  ],
+                )
 
                 // Text(foodOne.addedDate.difference(DateTime.now()).toString()),
               ],

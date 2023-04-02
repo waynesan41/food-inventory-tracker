@@ -1,5 +1,6 @@
 //==========
 import 'package:flutter/material.dart';
+import 'package:food_inventory_tracker/provider/statistics.dart';
 import 'package:food_inventory_tracker/screens/add_food_screen.dart';
 import 'package:food_inventory_tracker/screens/deleted_food_screen.dart';
 import 'package:food_inventory_tracker/screens/hidden_food_screen.dart';
@@ -14,40 +15,45 @@ import 'package:food_inventory_tracker/screens/food_detail_screen.dart';
 import 'package:food_inventory_tracker/screens/main_screen.dart';
 
 class MyApp extends StatelessWidget {
-  MyApp({super.key});
+  const MyApp({this.pref});
+  final pref;
 
   @override
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
         ChangeNotifierProvider(
-          create: (_) => OptionData(),
+          create: (_) => OptionData(pref),
         ),
         ChangeNotifierProvider(
           create: (_) => FoodItemList(),
         ),
+        ChangeNotifierProvider(
+          create: (_) => StatisticsList(),
+        ),
       ],
       child: Consumer<OptionData>(builder: (ctx, optData, _) {
+        final mytheme = optData.themeState;
         return MaterialApp(
             debugShowCheckedModeBanner: false,
             title: 'Food Inventory Tracker',
             theme: ThemeData(
               textTheme: MyThemeData.textTheme,
-              textSelectionTheme: optData.themeState
+              textSelectionTheme: mytheme
                   ? const TextSelectionThemeData(
                       cursorColor: Colors.white,
                     )
                   : const TextSelectionThemeData(
                       cursorColor: Colors.black,
                     ),
-              inputDecorationTheme: optData.themeState
+              inputDecorationTheme: mytheme
                   ? MyThemeData.inputDecorationThemeDark
                   : MyThemeData.inputDecorationThemeLight,
-              colorScheme: optData.themeState
+              colorScheme: mytheme
                   ? MyThemeData.colorSchemaDark
                   : MyThemeData.colorSchemaLight,
             ),
-            home: HiddenFoodScreen(),
+            home: MainScreen(),
             routes: {
               MainScreen.routeName: (ctx) => MainScreen(),
               FoodDetailScreen.routeName: (ctx) => FoodDetailScreen(),

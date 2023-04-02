@@ -1,4 +1,5 @@
 import "package:flutter/material.dart";
+import "package:food_inventory_tracker/widgets/dialogs/sort_filter_dialog.dart";
 
 class FilterSortMain extends StatelessWidget {
   const FilterSortMain({super.key});
@@ -15,8 +16,12 @@ class FilterSortMain extends StatelessWidget {
         borderRadius: const BorderRadius.all(Radius.circular(10)),
       ),
       child: IconButton(
-        onPressed: () {
+        onPressed: () async {
           //Switch Theme
+          return showDialog(
+            context: context,
+            builder: (context) => const SortFilterDialog(1),
+          );
         },
         icon: const Icon(Icons.filter_alt_outlined),
       ),

@@ -1,6 +1,11 @@
 import 'package:flutter/material.dart';
 import 'widgets/my_app.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
-void main() {
-  runApp(MyApp());
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  SharedPreferences preferences = await SharedPreferences.getInstance();
+  runApp(MyApp(
+    pref: preferences,
+  ));
 }

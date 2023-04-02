@@ -2,18 +2,14 @@
 import "dart:async";
 
 import "package:flutter/material.dart";
-import "package:food_inventory_tracker/database/db_helper.dart";
+import "package:provider/provider.dart";
+
 import "package:food_inventory_tracker/provider/food_list.dart";
 import "package:food_inventory_tracker/screens/add_food_screen.dart";
-import "package:provider/provider.dart";
-import "package:sqflite/sqflite.dart" as sql;
-
-import "package:food_inventory_tracker/provider/user_option_data.dart";
 import 'package:food_inventory_tracker/widgets/mainScreenAppBar/drawer_menu.dart';
 import 'package:food_inventory_tracker/widgets/mainScreenAppBar/filter_sort.dart';
 import 'package:food_inventory_tracker/widgets/mainScreenAppBar/search_input.dart';
 import 'package:food_inventory_tracker/widgets/foodItemDisplay/food_card_list.dart';
-import "package:sqflite/sqlite_api.dart";
 
 class MainScreen extends StatelessWidget {
   static final routeName = "/food-screen";
@@ -30,8 +26,10 @@ class MainScreen extends StatelessWidget {
       ),
       drawer: DrawerMenu(),
       body: FutureBuilder(
-        future: Provider.of<FoodItemList>(context, listen: false)
-            .fetchAndSetFoodItemList(),
+        future: Future.wait([
+          Provider.of<FoodItemList>(context, listen: false)
+              .fetchAndSetFoodItemList(),
+        ]),
         builder: (ctx, snapshot) =>
             snapshot.connectionState == ConnectionState.waiting
                 ? const Center(

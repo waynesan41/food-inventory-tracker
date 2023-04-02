@@ -25,7 +25,7 @@ class AddFoodScreen extends StatefulWidget {
 class _AddFoodScreenState extends State<AddFoodScreen> {
   bool _isLoading = false;
   final _form = GlobalKey<FormState>(); // Global Key to submit form
-  late int _id;
+
   String? _imgUrl;
   String? _name;
   String? _description;
@@ -34,10 +34,9 @@ class _AddFoodScreenState extends State<AddFoodScreen> {
   bool _hidden = false;
   File? _pickedImage;
 
+// Function Use In Child WIdget to Select Image File on This widget
   void _selectImage(File? pickedImage) {
     _pickedImage = pickedImage;
-    print("XXXXXXXXXX Picked Image XXXXXXXXXXX");
-    print(_pickedImage?.path ?? "No Image Selected");
   }
 
   void _presentDatePicker(DateTime? initDate, int dateType) {
@@ -88,7 +87,7 @@ class _AddFoodScreenState extends State<AddFoodScreen> {
       imgUrl: _imgUrl,
       addedDate: DateTime.now(),
       expireDate: _expireDate,
-      hidden: _hidden!,
+      hidden: _hidden,
     );
 
     Provider.of<FoodItemList>(context, listen: false).addFoodItem(newFood);

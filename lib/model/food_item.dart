@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 
 class FoodItemFields {
-  static final String id = "id";
-  static final String name = "name";
-  static final String description = "description";
-  static final String imgUrl = "imgUrl";
-  static final String addedDate = "addedDate";
-  static final String expireDate = "expireDate";
-  static final String hidden = "hidden";
-  static final String deleted = "deleted";
+  static const String id = "id";
+  static const String name = "name";
+  static const String description = "description";
+  static const String imgUrl = "imgUrl";
+  static const String addedDate = "addedDate";
+  static const String expireDate = "expireDate";
+  static const String hidden = "hidden";
+  static const String deleted = "deleted";
 }
 
 class FoodItem with ChangeNotifier {

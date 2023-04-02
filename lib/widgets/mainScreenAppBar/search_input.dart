@@ -21,7 +21,7 @@ class _SearchInputTextState extends State<SearchInputText> {
       onChanged: (value) =>
           Provider.of<FoodItemList>(context, listen: false).setSearch(value),
       onTapOutside: (ctx) {
-        FocusScope.of(context).requestFocus(new FocusNode());
+        FocusScope.of(context).requestFocus(FocusNode());
       },
       autofocus: false,
       textAlign: TextAlign.center,
