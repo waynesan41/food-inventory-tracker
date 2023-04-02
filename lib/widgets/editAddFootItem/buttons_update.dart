@@ -12,21 +12,21 @@ class ButtonsUpdate extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.spaceAround,
       children: [
         ElevatedButton(
-          child: const Text("Cancel"),
           style: ButtonStyle(
               backgroundColor: MaterialStateProperty.all(Colors.orange[700])),
           onPressed: () {
             Navigator.of(context).pop();
             // Navigator.of(context).pop();
           },
+          child: const Text("Cancel"),
         ),
         ElevatedButton(
-          child: Text("${_buttonType == 1 ? "Add Item" : "Update Item"}"),
           style: ButtonStyle(
               backgroundColor: MaterialStateProperty.all(Colors.green[700])),
           onPressed: () {
             _saveForm();
           },
+          child: Text(_buttonType == 1 ? "Add Item" : "Update Item"),
         ),
       ],
     );

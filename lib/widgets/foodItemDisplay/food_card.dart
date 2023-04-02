@@ -20,12 +20,6 @@ class FoodCard extends StatelessWidget {
         );
       },
       child: ClipRRect(
-        /* decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(10),
-          border: Border.all(
-            color: Colors.blueAccent,
-          ),
-        ), */
         borderRadius: BorderRadius.circular(10),
         child: GridTile(
           child: foodOne.imgUrl == null
@@ -37,7 +31,7 @@ class FoodCard extends StatelessWidget {
                   fit: BoxFit.cover,
                 ),
           footer: Container(
-            padding: EdgeInsets.only(left: 5),
+            padding: const EdgeInsets.only(left: 5, right: 5),
             decoration: BoxDecoration(
               color: Theme.of(context).colorScheme.background,
             ),
@@ -47,7 +41,7 @@ class FoodCard extends StatelessWidget {
                 Container(
                   alignment: Alignment.topLeft,
                   child: foodOne.name == null
-                      ? Text("")
+                      ? const Text("")
                       : Text(foodOne.name.toString()),
                 ),
                 Row(

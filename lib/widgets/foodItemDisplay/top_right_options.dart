@@ -10,7 +10,7 @@ import 'package:provider/provider.dart';
 class TopRightOptions extends StatelessWidget {
   final FoodItem _foodDetail;
 
-  const TopRightOptions(this._foodDetail);
+  const TopRightOptions(this._foodDetail, {super.key});
 
   @override
   Widget build(BuildContext context) {

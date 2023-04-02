@@ -1,10 +1,10 @@
 //==
-import "package:flutter/material.dart";
-import "package:food_inventory_tracker/widgets/mainScreenAppBar/filter_sort_hidden.dart";
 import "package:provider/provider.dart";
+import "package:flutter/material.dart";
+
 import "package:food_inventory_tracker/screens/add_food_screen.dart";
+import "package:food_inventory_tracker/widgets/mainScreenAppBar/filter_sort_hidden.dart";
 import "package:food_inventory_tracker/widgets/foodItemDisplay/hidden_food_card_list.dart";
-import "package:food_inventory_tracker/widgets/mainScreenAppBar/filter_sort.dart";
 import "package:food_inventory_tracker/widgets/mainScreenAppBar/search_hidden.dart";
 import "package:food_inventory_tracker/widgets/mainScreenAppBar/drawer_menu.dart";
 import "package:food_inventory_tracker/provider/food_list.dart";
@@ -23,7 +23,7 @@ class HiddenFoodScreen extends StatelessWidget {
           FilterSortHidden(),
         ],
       ),
-      drawer: DrawerMenu(),
+      drawer: const DrawerMenu(),
       body: FutureBuilder(
         future: Provider.of<FoodItemList>(context, listen: false)
             .fetchAndSetHiddenFoodItemList(),
@@ -33,7 +33,7 @@ class HiddenFoodScreen extends StatelessWidget {
                     child: CircularProgressIndicator(),
                   )
                 : Consumer<FoodItemList>(
-                    builder: (context, value, _) => HiddenFoodCardList(),
+                    builder: (context, value, _) => const HiddenFoodCardList(),
                   ),
       ),
       floatingActionButton: FloatingActionButton(

@@ -1,7 +1,6 @@
 //==========
 import "dart:io";
 
-import "package:flutter/gestures.dart";
 import "package:intl/intl.dart";
 import "package:flutter/material.dart";
 import "package:provider/provider.dart";
@@ -15,7 +14,6 @@ import "package:food_inventory_tracker/widgets/foodItemDisplay/image_full_screen
 import "package:food_inventory_tracker/widgets/foodItemDisplay/option_buttons.dart";
 
 import "package:food_inventory_tracker/provider/food_list.dart";
-import "package:food_inventory_tracker/screens/edit_food_screen.dart";
 
 class FoodDetailScreen extends StatelessWidget {
   const FoodDetailScreen({super.key});
@@ -40,7 +38,7 @@ class FoodDetailScreen extends StatelessWidget {
         ? const Text("nothing")
         : Scaffold(
             appBar: AppBar(
-              title: Text("${foodDetail.name ?? "No Name"}"),
+              title: Text(foodDetail.name ?? "No Name"),
               actions: [
                 foodDetail.deleted == null
                     ? TopRightOptions(foodDetail)
@@ -56,7 +54,7 @@ class FoodDetailScreen extends StatelessWidget {
                 child: Column(
                   children: [
                     Text(
-                      "${foodDetail.name ?? "No Name"}",
+                      foodDetail.name ?? "No Name",
                       style: Theme.of(context).textTheme.titleMedium,
                     ),
                     Divider(
@@ -68,8 +66,7 @@ class FoodDetailScreen extends StatelessWidget {
                       height: 15,
                       thickness: 3,
                     ),
-                    Container(
-                        child: Column(
+                    Column(
                       children: [
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -87,14 +84,17 @@ class FoodDetailScreen extends StatelessWidget {
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            Text(
-                                "${DateFormat.yMd().add_jm().format(foodDetail.addedDate)}"),
-                            Text(
-                                "${foodDetail.expireDate != null ? DateFormat.yMd().format(foodDetail.expireDate!) : "Not Added"}"),
+                            Text(DateFormat.yMd()
+                                .add_jm()
+                                .format(foodDetail.addedDate)),
+                            Text(foodDetail.expireDate != null
+                                ? DateFormat.yMd()
+                                    .format(foodDetail.expireDate!)
+                                : "Not Added"),
                           ],
                         ),
                       ],
-                    )),
+                    ),
                     Container(
                       margin: const EdgeInsets.only(top: 5),
                       child: foodDetail.deleted == null
@@ -108,7 +108,7 @@ class FoodDetailScreen extends StatelessWidget {
                       // child: InteractiveViewer(
                       //   constrained: true,
                       child: foodDetail.imgUrl == null
-                          ? Image(
+                          ? const Image(
                               image: AssetImage('assets/images/noimage.jpg'),
                             )
                           : GestureDetector(
@@ -130,7 +130,7 @@ class FoodDetailScreen extends StatelessWidget {
                       // ),
                     ),
                     Container(
-                      margin: EdgeInsets.only(
+                      margin: const EdgeInsets.only(
                         bottom: 10,
                       ),
                       child: Column(
@@ -142,11 +142,9 @@ class FoodDetailScreen extends StatelessWidget {
                               style: Theme.of(context).textTheme.titleSmall,
                             ),
                           ),
-                          Text("${foodDetail.description ?? "No Description"}"),
+                          Text(foodDetail.description ?? "No Description"),
 
                           //=====
-                          Text("${foodDetail.deleted ?? "Not DELETED"}"),
-                          Text("${foodDetail.imgUrl ?? "No Image"}")
                         ],
                       ),
                     )

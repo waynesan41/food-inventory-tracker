@@ -10,7 +10,7 @@ class FilterSortHidden extends StatelessWidget {
       margin: const EdgeInsets.only(right: 3, top: 3, bottom: 3),
       decoration: BoxDecoration(
         border: Border.all(
-          color: Color.fromARGB(255, 0, 140, 255),
+          color: const Color.fromARGB(255, 0, 140, 255),
           width: 3,
         ),
         borderRadius: const BorderRadius.all(Radius.circular(10)),
@@ -20,10 +20,10 @@ class FilterSortHidden extends StatelessWidget {
           //Dialog For Sort Filter
           return showDialog(
             context: context,
-            builder: (context) => SortFilterDialog(2),
+            builder: (context) => const SortFilterDialog(2),
           );
         },
-        color: Color.fromARGB(255, 0, 140, 255),
+        color: const Color.fromARGB(255, 0, 140, 255),
         icon: const Icon(Icons.filter_alt_outlined),
       ),
     );

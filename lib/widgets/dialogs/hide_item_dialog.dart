@@ -6,7 +6,7 @@ import "package:food_inventory_tracker/provider/food_list.dart";
 import "package:provider/provider.dart";
 
 class HideItemDialog extends StatelessWidget {
-  const HideItemDialog(this._foodDetail);
+  const HideItemDialog(this._foodDetail, {super.key});
 
   final FoodItem _foodDetail;
 

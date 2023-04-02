@@ -90,7 +90,7 @@ class DBHelper {
   static Future<int> addData(FoodItem newData) async {
     final db = await DBHelper.database();
 
-    final String updateQuery = '''
+    const String updateQuery = '''
     INSERT INTO food_item( 
     ${FoodItemFields.name},
     ${FoodItemFields.description},
@@ -119,7 +119,7 @@ class DBHelper {
   static Future<int> updateDelete(FoodItem updateData) async {
     final db = await DBHelper.database();
 
-    final String updateQuery = '''
+    const String updateQuery = '''
     UPDATE food_item SET 
     ${FoodItemFields.deleted} = ?
     WHERE id = ?
@@ -149,7 +149,7 @@ class DBHelper {
   static Future<int> updateData(int id, FoodItem updateData) async {
     final db = await DBHelper.database();
 
-    final String updateQuery = '''
+    const String updateQuery = '''
     UPDATE food_item SET 
     ${FoodItemFields.name} = ?,
     ${FoodItemFields.description} = ?,
@@ -182,7 +182,7 @@ class DBHelper {
   static Future<int> hideItemData(FoodItem updateData) async {
     final db = await DBHelper.database();
 
-    final String updateQuery = '''
+    const String updateQuery = '''
     UPDATE food_item SET 
     ${FoodItemFields.hidden} = ? 
     WHERE id = ?
@@ -220,7 +220,7 @@ class DBHelper {
   // Initializing Fake Data =====================================================
 
   static Future<void> setInitialData() async {
-    print("=============== Innitial Value Set =====================");
+    // print("=============== Innitial Value Set =====================");
 
     final myDB = await DBHelper.database();
     int id1 = await myDB.rawInsert('''
@@ -299,7 +299,6 @@ class DBHelper {
           ${DateTime.parse("2022-13-15 00:15:35").millisecondsSinceEpoch}
         )
         ''');
-    print("Inserted $id1");
   } // End Of Initial Data function
 } //End DBHelper() class
 

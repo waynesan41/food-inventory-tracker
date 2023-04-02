@@ -53,15 +53,15 @@ class MyApp extends StatelessWidget {
                   ? MyThemeData.colorSchemaDark
                   : MyThemeData.colorSchemaLight,
             ),
-            home: MainScreen(),
+            home: const MainScreen(),
             routes: {
-              MainScreen.routeName: (ctx) => MainScreen(),
-              FoodDetailScreen.routeName: (ctx) => FoodDetailScreen(),
-              EditFoodScreen.routName: (ctx) => EditFoodScreen(),
-              AddFoodScreen.routeName: (ctx) => AddFoodScreen(),
-              HiddenFoodScreen.routName: (ctx) => HiddenFoodScreen(),
-              DeletedScreen.routName: (ctx) => DeletedScreen(),
-              StatisticsScreen.routName: (ctx) => StatisticsScreen(),
+              MainScreen.routeName: (ctx) => const MainScreen(),
+              FoodDetailScreen.routeName: (ctx) => const FoodDetailScreen(),
+              EditFoodScreen.routName: (ctx) => const EditFoodScreen(),
+              AddFoodScreen.routeName: (ctx) => const AddFoodScreen(),
+              HiddenFoodScreen.routName: (ctx) => const HiddenFoodScreen(),
+              DeletedScreen.routName: (ctx) => const DeletedScreen(),
+              StatisticsScreen.routName: (ctx) => const StatisticsScreen(),
             });
       }),
     );

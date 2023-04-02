@@ -12,7 +12,7 @@ import 'package:food_inventory_tracker/widgets/mainScreenAppBar/search_input.dar
 import 'package:food_inventory_tracker/widgets/foodItemDisplay/food_card_list.dart';
 
 class MainScreen extends StatelessWidget {
-  static final routeName = "/food-screen";
+  static const routeName = "/food-screen";
   const MainScreen({super.key});
 
   @override
@@ -24,7 +24,7 @@ class MainScreen extends StatelessWidget {
           FilterSortMain(),
         ],
       ),
-      drawer: DrawerMenu(),
+      drawer: const DrawerMenu(),
       body: FutureBuilder(
         future: Future.wait([
           Provider.of<FoodItemList>(context, listen: false)
@@ -36,7 +36,7 @@ class MainScreen extends StatelessWidget {
                     child: CircularProgressIndicator(),
                   )
                 : Consumer<FoodItemList>(
-                    builder: (context, value, _) => FoodCardList(),
+                    builder: (context, value, _) => const FoodCardList(),
                   ),
       ),
       floatingActionButton: FloatingActionButton(

@@ -5,8 +5,8 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 
 class ImageFullScreen extends StatelessWidget {
+  const ImageFullScreen(this._imgUrl, {super.key});
   final _imgUrl;
-  const ImageFullScreen(this._imgUrl);
 
   @override
   Widget build(BuildContext context) {

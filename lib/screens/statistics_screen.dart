@@ -14,10 +14,9 @@ class StatisticsScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Statistics"),
-        actions: [],
+        title: const Text("Statistics"),
       ),
-      drawer: DrawerMenu(),
+      drawer: const DrawerMenu(),
       body: FutureBuilder(
         future: Provider.of<StatisticsList>(context, listen: false)
             .fetchAndSetStats(),

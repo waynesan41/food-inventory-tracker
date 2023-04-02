@@ -41,8 +41,6 @@ class _EditFoodScreenState extends State<EditFoodScreen> {
 
   void _selectImage(File? pickedImage) {
     _pickedImage = pickedImage;
-    print("XXXXXXXXXX Picked Image XXXXXXXXXXX");
-    print(_pickedImage?.path ?? "No Image Selected");
   }
 
   void _presentDatePicker(DateTime? initDate, int dateType) {
@@ -73,16 +71,14 @@ class _EditFoodScreenState extends State<EditFoodScreen> {
 
   @override
   void didChangeDependencies() {
-    // TODO: implement didChangeDependencies
     if (!_initial) {
       final foodDetail = ModalRoute.of(context)?.settings.arguments as FoodItem;
       _id = foodDetail.id;
-      print(foodDetail.name);
       _name = foodDetail.name == null ? "" : foodDetail.name.toString();
       _imgUrl = foodDetail.imgUrl;
       _addedDate = foodDetail.addedDate;
       _expireDate = foodDetail.expireDate;
-      _description = foodDetail.description.toString();
+      _description = foodDetail.description;
       _hidden = foodDetail.hidden;
       _deleted = foodDetail.deleted;
       _pickedImage =
@@ -101,6 +97,7 @@ class _EditFoodScreenState extends State<EditFoodScreen> {
     if (_pickedImage != null) {
       if (_pickedImage!.path != _imgUrl) {
         final appDoc = await syspaths.getApplicationDocumentsDirectory();
+        // final String fileName = path.basename(_pickedImage!.path);
         final String fileName = path.basename(_pickedImage!.path);
         if (_imgUrl != null) {
           await File(_imgUrl.toString()).delete();
@@ -125,7 +122,7 @@ class _EditFoodScreenState extends State<EditFoodScreen> {
       hidden: _hidden,
       deleted: _deleted,
     );
-    print("11111111111BMIT ISSSSSS CALL");
+
     Provider.of<FoodItemList>(context, listen: false)
         .editFoodItem(_id, updatedFood);
 
@@ -140,8 +137,9 @@ class _EditFoodScreenState extends State<EditFoodScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-          title:
-              _isLoading ? CircularProgressIndicator() : Text("Edit Food Item"),
+          title: _isLoading
+              ? const CircularProgressIndicator()
+              : const Text("Edit Food Item"),
           actions: [
             EditAppBar(_isLoading, _saveForm),
           ]),

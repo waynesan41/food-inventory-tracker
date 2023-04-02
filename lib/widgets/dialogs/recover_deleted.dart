@@ -7,7 +7,7 @@ import "package:provider/provider.dart";
 
 class RecoverDialog extends StatelessWidget {
   final FoodItem _foodDetail;
-  const RecoverDialog(this._foodDetail);
+  const RecoverDialog(this._foodDetail, {super.key});
 
   @override
   Widget build(BuildContext context) {

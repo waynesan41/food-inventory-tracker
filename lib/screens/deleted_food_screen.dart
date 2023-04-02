@@ -16,14 +16,14 @@ class DeletedScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Deleted Items"),
+        title: const Text("Deleted Items"),
         actions: [
           Container(
             margin: const EdgeInsets.only(top: 6, bottom: 6, right: 6),
             child: ElevatedButton.icon(
               style: ButtonStyle(
-                backgroundColor:
-                    MaterialStateProperty.all(Color.fromARGB(255, 202, 36, 24)),
+                backgroundColor: MaterialStateProperty.all(
+                    const Color.fromARGB(255, 202, 36, 24)),
               ),
               icon: const Icon(Icons.delete_forever_outlined),
               label: const Text("Delete All"),
@@ -32,14 +32,14 @@ class DeletedScreen extends StatelessWidget {
 
                 return showDialog(
                   context: context,
-                  builder: (context) => DeleteAllDialog(),
+                  builder: (context) => const DeleteAllDialog(),
                 );
               },
             ),
           )
         ],
       ),
-      drawer: DrawerMenu(),
+      drawer: const DrawerMenu(),
       body: FutureBuilder(
         future: Provider.of<FoodItemList>(context, listen: false)
             .fetchDeletedFoodItemList(),
@@ -49,7 +49,7 @@ class DeletedScreen extends StatelessWidget {
                     child: CircularProgressIndicator(),
                   )
                 : Consumer<FoodItemList>(
-                    builder: (context, value, _) => DeletedFoodCardList(),
+                    builder: (context, value, _) => const DeletedFoodCardList(),
                   ),
       ),
     );

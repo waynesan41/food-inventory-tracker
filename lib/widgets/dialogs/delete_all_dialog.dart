@@ -17,7 +17,7 @@ class _DeleteAllDialogState extends State<DeleteAllDialog> {
   Widget build(BuildContext context) {
     return AlertDialog(
       title: loading
-          ? CircularProgressIndicator()
+          ? const CircularProgressIndicator()
           : const Text("Delete ALL Item!"),
       content: const Text("All item's data will be delete from phone."),
       actions: [

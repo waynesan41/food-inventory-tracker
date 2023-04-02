@@ -7,7 +7,7 @@ import 'package:food_inventory_tracker/widgets/dialogs/delete_dialog.dart';
 import 'package:food_inventory_tracker/widgets/dialogs/hide_item_dialog.dart';
 
 class OptionButtons extends StatelessWidget {
-  const OptionButtons(this._foodDetail);
+  const OptionButtons(this._foodDetail, {super.key});
   final FoodItem _foodDetail;
 
   @override

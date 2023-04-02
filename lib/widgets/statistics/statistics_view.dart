@@ -9,7 +9,7 @@ class StatisticsView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     statsData = Provider.of<StatisticsList>(context).stats;
-    print(statsData);
+
     return GridView.count(
       crossAxisCount: 2,
       childAspectRatio: 0.9,

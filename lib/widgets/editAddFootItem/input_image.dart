@@ -2,11 +2,8 @@
 import "dart:async";
 import "dart:io";
 
-import "package:flutter/gestures.dart";
 import "package:flutter/material.dart";
 import "package:image_picker/image_picker.dart";
-import "package:path/path.dart" as path;
-import "package:path_provider/path_provider.dart" as syspaths;
 
 class ImageInput extends StatefulWidget {
   final String? imgUrl;
@@ -31,13 +28,10 @@ class ImageInputState extends State<ImageInput> {
     if (imageFile == null) {
       return;
     }
-    print("+++++++ Image File Path ++++++++++++++++");
-    print(imageFile.path);
+
     setState(() {
       _storedImage = File(imageFile.path);
     });
-    print("+++++++ _SelectedPath ++++++++++++++++");
-    print(_storedImage!.path);
 
     widget.onSelectImage(_storedImage);
   }
@@ -49,12 +43,10 @@ class ImageInputState extends State<ImageInput> {
     if (imageFile == null) {
       return;
     }
-    print("+++++++ Image File Path ++++++++++++++++");
-    print(imageFile.path);
+
     setState(() {
       _storedImage = File(imageFile.path);
     });
-    print(_storedImage!.path);
 
     widget.onSelectImage(_storedImage);
   }
@@ -95,10 +87,11 @@ class ImageInputState extends State<ImageInput> {
                       decoration: BoxDecoration(
                         border: Border.all(
                             color: Theme.of(context).colorScheme.secondary),
-                        borderRadius: BorderRadius.all(Radius.circular(25)),
+                        borderRadius:
+                            const BorderRadius.all(Radius.circular(25)),
                       ),
-                      child: Center(
-                        child: const Text("No Image Added"),
+                      child: const Center(
+                        child: Text("No Image Added"),
                       ),
                     )
                   : Image.file(
