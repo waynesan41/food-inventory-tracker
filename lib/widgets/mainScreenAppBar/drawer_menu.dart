@@ -11,8 +11,7 @@ class DrawerMenu extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final _currTheme =
-        Provider.of<OptionData>(context, listen: false).themeState;
+    final _currTheme = Provider.of<OptionData>(context).themeState;
     return Drawer(
       child: Column(
         children: <Widget>[

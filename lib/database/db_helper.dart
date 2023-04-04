@@ -17,7 +17,9 @@ class DBHelper {
     );
   }
 
-//Create Table Query
+  //=========================================
+  // Create Table and Data Base
+  //=========================================
   static Future createDB(sql.Database db, int version) async {
     const tableName = "food_item";
     const idType = "INTEGER PRIMARY KEY AUTOINCREMENT";
@@ -52,7 +54,6 @@ class DBHelper {
   //=========================================
   // GETTING DATA
   //=========================================
-
   static Future<List<Map<String, dynamic>>> getData(int? sortType) async {
     final db = await DBHelper.database();
 
@@ -85,6 +86,21 @@ class DBHelper {
   }
 
   //=========================================
+  // Get Max ID
+  //=========================================
+  static Future<int> getMaxID() async {
+    final db = await DBHelper.database();
+
+    const String updateQuery =
+        "SELECT seq AS ${FoodItemFields.id} FROM sqlite_sequence";
+    // "SELECT MAX(${FoodItemFields.id}) AS ${FoodItemFields.id} FROM food_item";
+    final queryRes = await db.rawQuery(updateQuery);
+    int id = queryRes.isEmpty ? 0 : queryRes[0][FoodItemFields.id] as int;
+
+    return ++id;
+  }
+
+  //=========================================
   // Adding New Item to Database
   //=========================================
   static Future<int> addData(FoodItem newData) async {
@@ -113,9 +129,9 @@ class DBHelper {
     ]);
   }
 
-  //=========================================
+  //================================================
   // Update Delete in Database
-  //=========================================
+  //================================================
   static Future<int> updateDelete(FoodItem updateData) async {
     final db = await DBHelper.database();
 
@@ -133,7 +149,7 @@ class DBHelper {
   }
 
   //=========================================
-  // Update Delete in Database
+  // DELETE in Database and Phone
   //=========================================
   static Future<int> deleteCompleteData(FoodItem deleteFood) async {
     final db = await DBHelper.database();
@@ -193,6 +209,9 @@ class DBHelper {
     ]);
   }
 
+  //==========================================
+  // Get Stats of the Data
+  //==========================================
   static Future<List<int>> getStats() async {
     List<int> data = [];
     final myDB = await DBHelper.database();
@@ -217,9 +236,14 @@ class DBHelper {
 
     return data;
   }
+
   // Initializing Fake Data =====================================================
 
-  static Future<void> setInitialData() async {
+  // Initializing Fake Data =====================================================
+
+  // Initializing Fake Data =====================================================
+
+  /* static Future<void> setInitialData() async {
     // print("=============== Innitial Value Set =====================");
 
     final myDB = await DBHelper.database();
@@ -299,7 +323,7 @@ class DBHelper {
           ${DateTime.parse("2022-13-15 00:15:35").millisecondsSinceEpoch}
         )
         ''');
-  } // End Of Initial Data function
+  } */ // End Of Initial Data function
 } //End DBHelper() class
 
 

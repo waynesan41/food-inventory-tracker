@@ -8,10 +8,7 @@ import "package:image_picker/image_picker.dart";
 class ImageInput extends StatefulWidget {
   final String? imgUrl;
   final Function onSelectImage;
-  const ImageInput(
-    this.imgUrl,
-    this.onSelectImage,
-  );
+  const ImageInput(this.imgUrl, this.onSelectImage, {super.key});
 
   @override
   State<ImageInput> createState() => ImageInputState();

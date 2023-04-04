@@ -5,7 +5,7 @@ import "package:food_inventory_tracker/provider/food_list.dart";
 import "package:provider/provider.dart";
 
 class DeleteAllDialog extends StatefulWidget {
-  const DeleteAllDialog();
+  const DeleteAllDialog({super.key});
 
   @override
   State<DeleteAllDialog> createState() => _DeleteAllDialogState();

@@ -18,8 +18,11 @@ class StatisticsScreen extends StatelessWidget {
       ),
       drawer: const DrawerMenu(),
       body: FutureBuilder(
-        future: Provider.of<StatisticsList>(context, listen: false)
-            .fetchAndSetStats(),
+        future: Future.wait([
+          Provider.of<StatisticsList>(context, listen: false)
+              .fetchAndSetStats(),
+          Provider.of<StatisticsList>(context, listen: false).fetchMaxID(),
+        ]),
         builder: (ctx, snapshot) =>
             snapshot.connectionState == ConnectionState.waiting
                 ? const Center(

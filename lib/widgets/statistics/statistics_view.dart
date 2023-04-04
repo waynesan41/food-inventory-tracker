@@ -6,9 +6,11 @@ import 'package:food_inventory_tracker/provider/statistics.dart';
 class StatisticsView extends StatelessWidget {
   StatisticsView({super.key});
   late List<int> statsData = [];
+  int? _maxID;
   @override
   Widget build(BuildContext context) {
     statsData = Provider.of<StatisticsList>(context).stats;
+    _maxID = Provider.of<StatisticsList>(context).maxID;
 
     return GridView.count(
       crossAxisCount: 2,
@@ -45,6 +47,13 @@ class StatisticsView extends StatelessWidget {
             style: Theme.of(context).textTheme.titleMedium,
           ),
         ),
+        /* Container(
+          alignment: Alignment.center,
+          child: Text(
+            "Max ID: ${_maxID}",
+            style: Theme.of(context).textTheme.titleMedium,
+          ),
+        ), */
       ],
     );
   }

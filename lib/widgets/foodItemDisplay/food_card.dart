@@ -13,7 +13,6 @@ class FoodCard extends StatelessWidget {
     final foodOne = Provider.of<FoodItem>(context, listen: false);
     return GestureDetector(
       onTap: () {
-        print(foodOne.id);
         Navigator.of(context).pushNamed(
           FoodDetailScreen.routeName,
           arguments: foodOne,
@@ -23,7 +22,7 @@ class FoodCard extends StatelessWidget {
         borderRadius: BorderRadius.circular(10),
         child: GridTile(
           child: foodOne.imgUrl == null
-              ? Image(
+              ? const Image(
                   image: AssetImage('assets/images/noimage.jpg'),
                 )
               : Image.file(

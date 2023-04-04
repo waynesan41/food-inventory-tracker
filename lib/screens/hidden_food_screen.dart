@@ -20,7 +20,7 @@ class HiddenFoodScreen extends StatelessWidget {
       appBar: AppBar(
         title: const HiddenSearchInputText(),
         actions: [
-          FilterSortHidden(),
+          const FilterSortHidden(),
         ],
       ),
       drawer: const DrawerMenu(),

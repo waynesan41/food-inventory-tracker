@@ -46,7 +46,7 @@ class _EditFoodScreenState extends State<EditFoodScreen> {
   void _presentDatePicker(DateTime? initDate, int dateType) {
     showDatePicker(
       context: context,
-      initialDate: initDate == null ? DateTime.now() : initDate,
+      initialDate: initDate ?? DateTime.now(),
       firstDate: DateTime(2000),
       lastDate: dateType == 1 ? DateTime.now() : DateTime(2100),
     ).then((pickedData) {
@@ -98,12 +98,15 @@ class _EditFoodScreenState extends State<EditFoodScreen> {
       if (_pickedImage!.path != _imgUrl) {
         final appDoc = await syspaths.getApplicationDocumentsDirectory();
         // final String fileName = path.basename(_pickedImage!.path);
-        final String fileName = path.basename(_pickedImage!.path);
+        // Delete Old Image If it exists
         if (_imgUrl != null) {
           await File(_imgUrl.toString()).delete();
         }
-        _imgUrl = "${appDoc.path}/${fileName}";
-        await _pickedImage!.copy("${_imgUrl}");
+        // No Original Image but New Image is added
+        final String fileName =
+            _id.toString() + path.extension(_pickedImage!.path);
+        _imgUrl = "${appDoc.path}/$fileName";
+        await _pickedImage!.copy(_imgUrl!);
         await _pickedImage!.delete();
       }
     } else {

@@ -11,7 +11,7 @@ enum RadioOption {
 }
 
 class SortFilterDialog extends StatefulWidget {
-  const SortFilterDialog(this.type);
+  const SortFilterDialog(this.type, {super.key});
   final int type;
   @override
   State<SortFilterDialog> createState() => _SortFilterDialogState();
@@ -22,23 +22,18 @@ class _SortFilterDialogState extends State<SortFilterDialog> {
   RadioOption? _option;
   @override
   void initState() {
-    // TODO: implement initState
     init = true;
     super.initState();
   }
 
   @override
   void didChangeDependencies() {
-    // TODO: implement didChangeDependencies
     if (init) {
       int sortVal =
           Provider.of<FoodItemList>(context).getSortValue(widget.type);
-      print("_________OOOOOOOOOPPPPPP");
-      print(sortVal);
       setState(() {
         _option = RadioOption.values[sortVal];
       });
-      print(_option);
     }
     super.didChangeDependencies();
   }

@@ -1,11 +1,10 @@
 //==
 import 'package:flutter/material.dart';
+
 import 'package:food_inventory_tracker/model/food_item.dart';
-import 'package:food_inventory_tracker/provider/food_list.dart';
 import 'package:food_inventory_tracker/screens/edit_food_screen.dart';
 import 'package:food_inventory_tracker/widgets/dialogs/delete_dialog.dart';
 import 'package:food_inventory_tracker/widgets/dialogs/hide_item_dialog.dart';
-import 'package:provider/provider.dart';
 
 class TopRightOptions extends StatelessWidget {
   final FoodItem _foodDetail;
@@ -14,12 +13,6 @@ class TopRightOptions extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    void _deleteItem() {
-      _foodDetail.deleted = DateTime.now();
-      Provider.of<FoodItemList>(context, listen: false)
-          .updateDeleteFoodItem(_foodDetail);
-    }
-
     return Row(
       children: [
         IconButton(

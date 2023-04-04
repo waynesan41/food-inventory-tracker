@@ -1,13 +1,18 @@
 //======
+import 'dart:async';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 import 'package:food_inventory_tracker/database/db_helper.dart';
 import 'package:food_inventory_tracker/model/food_item.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class FoodItemList with ChangeNotifier {
+  FoodItemList(this.prefs) {
+    this.getSort();
+  }
+  final SharedPreferences prefs;
   List<FoodItem> _foodItemList = [];
   List<FoodItem> _deletedItem = [];
   List<FoodItem> _hiddenItem = [];
@@ -68,17 +73,18 @@ class FoodItemList with ChangeNotifier {
   // =====================================================
   // Get Sorted Types ========================================================
   void setSort(int sortVal, int type) async {
-    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    // final SharedPreferences prefs = await SharedPreferences.getInstance();
     if (type == 1) {
       _sort = sortVal;
       await prefs.setInt('sort', sortVal).then(
         (value) {
           fetchAndSetFoodItemList();
-          notifyListeners();
+          // notifyListeners();
         },
       );
     } else if (type == 2) {
       _sortHide = sortVal;
+
       await prefs.setInt('sortHide', sortVal).then(
         (value) {
           fetchAndSetHiddenFoodItemList();
@@ -98,7 +104,7 @@ class FoodItemList with ChangeNotifier {
 
   // Get Sorted for Hidden  Types ============================================
   Future<int> getSort() async {
-    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    // final SharedPreferences prefs = await SharedPreferences.getInstance();
     if (prefs.getInt('sortHide') == null) {
       prefs.setInt('sortHide', 0);
       _sortHide = 0;
@@ -116,73 +122,65 @@ class FoodItemList with ChangeNotifier {
 
   // Get Sorted Food ==============================================
   Future<void> fetchAndSetFoodItemList() async {
-    await getSort().then(
+    await DBHelper.getData(_sort).then(
       (value) {
-        DBHelper.getData(_sort).then(
-          (value) {
-            _foodItemList = value.map(
-              (item) {
-                return FoodItem(
-                  id: item[FoodItemFields.id],
-                  name: item[FoodItemFields.name],
-                  description: item[FoodItemFields.description],
-                  imgUrl: item[FoodItemFields.imgUrl],
-                  addedDate: DateTime.fromMillisecondsSinceEpoch(
-                      item[FoodItemFields.addedDate]),
-                  expireDate: item[FoodItemFields.expireDate] == null
-                      ? null
-                      : DateTime.fromMillisecondsSinceEpoch(
-                          item[FoodItemFields.expireDate]),
-                  hidden: item[FoodItemFields.hidden] == 0 ? false : true,
-                  deleted: item[FoodItemFields.deleted] == null
-                      ? null
-                      : DateTime.fromMillisecondsSinceEpoch(
-                          item[FoodItemFields.deleted]),
-                );
-              },
-            ).toList();
+        _foodItemList = value.map(
+          (item) {
+            return FoodItem(
+              id: item[FoodItemFields.id],
+              name: item[FoodItemFields.name],
+              description: item[FoodItemFields.description],
+              imgUrl: item[FoodItemFields.imgUrl],
+              addedDate: DateTime.fromMillisecondsSinceEpoch(
+                  item[FoodItemFields.addedDate]),
+              expireDate: item[FoodItemFields.expireDate] == null
+                  ? null
+                  : DateTime.fromMillisecondsSinceEpoch(
+                      item[FoodItemFields.expireDate]),
+              hidden: item[FoodItemFields.hidden] == 0 ? false : true,
+              deleted: item[FoodItemFields.deleted] == null
+                  ? null
+                  : DateTime.fromMillisecondsSinceEpoch(
+                      item[FoodItemFields.deleted]),
+            );
           },
-        ).then(
-          (_) {
-            notifyListeners();
-          },
-        );
+        ).toList();
+      },
+    ).then(
+      (_) {
+        notifyListeners();
       },
     );
   }
 
   Future<void> fetchAndSetHiddenFoodItemList() async {
-    await getSort().then(
+    await DBHelper.getHiddedData(_sortHide).then(
+      (value) {
+        _hiddenItem = value.map(
+          (item) {
+            return FoodItem(
+              id: item[FoodItemFields.id],
+              name: item[FoodItemFields.name],
+              description: item[FoodItemFields.description],
+              imgUrl: item[FoodItemFields.imgUrl],
+              addedDate: DateTime.fromMillisecondsSinceEpoch(
+                  item[FoodItemFields.addedDate]),
+              expireDate: item[FoodItemFields.expireDate] == null
+                  ? null
+                  : DateTime.fromMillisecondsSinceEpoch(
+                      item[FoodItemFields.expireDate]),
+              hidden: item[FoodItemFields.hidden] == 0 ? false : true,
+              deleted: item[FoodItemFields.deleted] == null
+                  ? null
+                  : DateTime.fromMillisecondsSinceEpoch(
+                      item[FoodItemFields.deleted]),
+            );
+          },
+        ).toList();
+      },
+    ).then(
       (_) {
-        DBHelper.getHiddedData(_sortHide).then(
-          (value) {
-            _hiddenItem = value.map(
-              (item) {
-                return FoodItem(
-                  id: item[FoodItemFields.id],
-                  name: item[FoodItemFields.name],
-                  description: item[FoodItemFields.description],
-                  imgUrl: item[FoodItemFields.imgUrl],
-                  addedDate: DateTime.fromMillisecondsSinceEpoch(
-                      item[FoodItemFields.addedDate]),
-                  expireDate: item[FoodItemFields.expireDate] == null
-                      ? null
-                      : DateTime.fromMillisecondsSinceEpoch(
-                          item[FoodItemFields.expireDate]),
-                  hidden: item[FoodItemFields.hidden] == 0 ? false : true,
-                  deleted: item[FoodItemFields.deleted] == null
-                      ? null
-                      : DateTime.fromMillisecondsSinceEpoch(
-                          item[FoodItemFields.deleted]),
-                );
-              },
-            ).toList();
-          },
-        ).then(
-          (_) {
-            notifyListeners();
-          },
-        );
+        notifyListeners();
       },
     );
   }
@@ -255,6 +253,10 @@ class FoodItemList with ChangeNotifier {
     }
   }
 
+  Future<int> fetchMaxID() async {
+    return await DBHelper.getMaxID();
+  }
+
   // Add New Food Item =================================================
   Future<void> addFoodItem(FoodItem newFood) async {
     final result = await DBHelper.addData(newFood);
@@ -271,6 +273,7 @@ class FoodItemList with ChangeNotifier {
     newFood.hidden
         ? _hiddenItem.insert(0, insertFood)
         : _foodItemList.insert(0, insertFood);
+
     notifyListeners();
   }
 

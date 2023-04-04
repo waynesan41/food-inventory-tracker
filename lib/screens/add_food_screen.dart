@@ -2,12 +2,12 @@
 import "dart:io";
 
 import "package:flutter/material.dart";
-import "package:food_inventory_tracker/widgets/editAddFootItem/buttons_update.dart";
 import "package:provider/provider.dart";
 import "package:intl/intl.dart";
 import "package:path_provider/path_provider.dart" as syspaths;
 import "package:path/path.dart" as path;
 
+import "package:food_inventory_tracker/widgets/editAddFootItem/buttons_update.dart";
 import "package:food_inventory_tracker/model/food_item.dart";
 import "package:food_inventory_tracker/provider/food_list.dart";
 import "package:food_inventory_tracker/widgets/editAddFootItem/input_image.dart";
@@ -29,7 +29,7 @@ class _AddFoodScreenState extends State<AddFoodScreen> {
   String? _imgUrl;
   String? _name;
   String? _description;
-  DateTime? _addedDate;
+
   DateTime? _expireDate;
   bool _hidden = false;
   File? _pickedImage;
@@ -42,7 +42,7 @@ class _AddFoodScreenState extends State<AddFoodScreen> {
   void _presentDatePicker(DateTime? initDate, int dateType) {
     showDatePicker(
       context: context,
-      initialDate: initDate == null ? DateTime.now() : initDate,
+      initialDate: initDate ?? DateTime.now(),
       firstDate: DateTime(2000),
       lastDate: dateType == 1 ? DateTime.now() : DateTime(2100),
     ).then((pickedData) {
@@ -51,7 +51,7 @@ class _AddFoodScreenState extends State<AddFoodScreen> {
           return;
         }
         if (dateType == 1) {
-          _addedDate = pickedData;
+          //_addedDate = pickedDate
         } else if (dateType == 2) {
           _expireDate = pickedData;
         }
@@ -67,16 +67,14 @@ class _AddFoodScreenState extends State<AddFoodScreen> {
     });
     //Add New Image If there are any
     if (_pickedImage != null) {
-      if (_pickedImage!.path != _imgUrl) {
-        final appDoc = await syspaths.getApplicationDocumentsDirectory();
-        final String fileName = path.basename(_pickedImage!.path);
-        if (_imgUrl != null) {
-          await File(_imgUrl.toString()).delete();
-        }
-        _imgUrl = "${appDoc.path}/${fileName}";
-        await _pickedImage!.copy("${_imgUrl}");
-        await _pickedImage!.delete();
-      }
+      final appDoc = await syspaths.getApplicationDocumentsDirectory();
+      final String extension = path.extension(_pickedImage!.path);
+      final int maxID = await Provider.of<FoodItemList>(context, listen: false)
+          .fetchMaxID() as int;
+
+      _imgUrl = "${appDoc.path}/${maxID.toString() + extension}";
+      await _pickedImage!.copy(_imgUrl!);
+      await _pickedImage!.delete();
     } else {
       _imgUrl = null;
     }
@@ -89,7 +87,6 @@ class _AddFoodScreenState extends State<AddFoodScreen> {
       expireDate: _expireDate,
       hidden: _hidden,
     );
-
     Provider.of<FoodItemList>(context, listen: false).addFoodItem(newFood);
 
     setState(() {
@@ -106,7 +103,7 @@ class _AddFoodScreenState extends State<AddFoodScreen> {
       appBar: AppBar(
           title: _isLoading
               ? const CircularProgressIndicator()
-              : Text("${_hidden ? "Add New Hidden Item" : "Add New Item"}"),
+              : Text(_hidden ? "Add New Hidden Item" : "Add New Item"),
           actions: [
             EditAppBar(_isLoading, _saveForm),
           ]),
@@ -192,6 +189,5 @@ class _AddFoodScreenState extends State<AddFoodScreen> {
         ),
       ),
     );
-    ;
   }
 }

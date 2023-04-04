@@ -15,7 +15,7 @@ class HiddenFoodCardList extends StatelessWidget {
     return RefreshIndicator(
       onRefresh:
           Provider.of<FoodItemList>(context).fetchAndSetHiddenFoodItemList,
-      child: foodItems.isEmpty
+      child: foodItems.length == 0 || foodItems.isEmpty
           ? const Center(
               child: Text("No Hidden Food Item Found..."),
             )

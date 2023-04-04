@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -11,11 +12,12 @@ class DeletedFoodCardList extends StatelessWidget {
   Widget build(BuildContext context) {
     final foodItemData = Provider.of<FoodItemList>(context, listen: false);
     final foodItems = foodItemData.deletedFoodItemList;
-
     return RefreshIndicator(
       onRefresh: Provider.of<FoodItemList>(context).fetchDeletedFoodItemList,
-      child: foodItems == []
-          ? const Text("No Deleted Items..")
+      child: foodItems.length == 0 || foodItems.isEmpty
+          ? const Center(
+              child: Text("No Deleted Items.."),
+            )
           : GridView.builder(
               padding: const EdgeInsets.all(10.0),
               itemCount: foodItems.length,

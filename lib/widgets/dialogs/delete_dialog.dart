@@ -1,13 +1,13 @@
 //==
-
 import "package:flutter/material.dart";
+import "package:provider/provider.dart";
+
 import "package:food_inventory_tracker/model/food_item.dart";
 import "package:food_inventory_tracker/provider/food_list.dart";
-import "package:provider/provider.dart";
 
 class DeleteDialog extends StatelessWidget {
   final FoodItem _foodDetail;
-  const DeleteDialog(this._foodDetail);
+  const DeleteDialog(this._foodDetail, {super.key});
 
   @override
   Widget build(BuildContext context) {

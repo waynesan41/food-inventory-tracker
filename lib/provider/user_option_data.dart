@@ -3,8 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class OptionData with ChangeNotifier {
-  //Default Data
-  OptionData(this.pref);
+  OptionData(this.pref) {
+    this.fetchAndSetUserTheme();
+  }
   final SharedPreferences pref;
 
   //Change Filter Sorting

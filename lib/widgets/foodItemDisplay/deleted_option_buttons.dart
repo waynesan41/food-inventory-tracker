@@ -1,14 +1,13 @@
+//===
 import 'package:flutter/material.dart';
+
 import 'package:food_inventory_tracker/model/food_item.dart';
-import 'package:food_inventory_tracker/provider/food_list.dart';
-import 'package:food_inventory_tracker/screens/edit_food_screen.dart';
 import 'package:food_inventory_tracker/widgets/dialogs/forever_delete_dialog.dart';
 import 'package:food_inventory_tracker/widgets/dialogs/recover_deleted.dart';
 import 'package:food_inventory_tracker/widgets/dialogs/save_image_dialog.dart';
-import 'package:provider/provider.dart';
 
 class DeletedOptionButtons extends StatelessWidget {
-  const DeletedOptionButtons(this._foodDetail);
+  const DeletedOptionButtons(this._foodDetail, {super.key});
   final FoodItem _foodDetail;
 
   @override
@@ -24,7 +23,7 @@ class DeletedOptionButtons extends StatelessWidget {
           ),
           child: IconButton(
             color: Colors.green,
-            icon: Icon(Icons.save_alt),
+            icon: const Icon(Icons.save_alt),
             onPressed: () async {
               //Save Image
               return showDialog(

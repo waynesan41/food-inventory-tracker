@@ -14,9 +14,9 @@ class FoodCardList extends StatelessWidget {
 
     return RefreshIndicator(
       onRefresh: Provider.of<FoodItemList>(context).fetchAndSetFoodItemList,
-      child: foodItems.length == 0
-          ? Center(
-              child: const Text("No Food Item Found..."),
+      child: foodItems.length == 0 || foodItems.isEmpty
+          ? const Center(
+              child: Text("No Food Item Found..."),
             )
           : GridView.builder(
               padding: const EdgeInsets.all(10.0),

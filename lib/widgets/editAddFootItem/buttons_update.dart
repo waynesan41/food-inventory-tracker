@@ -2,9 +2,9 @@
 import "package:flutter/material.dart";
 
 class ButtonsUpdate extends StatelessWidget {
+  const ButtonsUpdate(this._saveForm, this._buttonType, {super.key});
   final Function _saveForm;
   final int _buttonType;
-  const ButtonsUpdate(this._saveForm, this._buttonType);
 
   @override
   Widget build(BuildContext context) {

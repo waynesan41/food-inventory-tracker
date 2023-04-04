@@ -21,7 +21,7 @@ class _HiddenSearchInputTextState extends State<HiddenSearchInputText> {
       onChanged: (value) => Provider.of<FoodItemList>(context, listen: false)
           .setSearchHide(value),
       onTapOutside: (ctx) {
-        FocusScope.of(context).requestFocus(new FocusNode());
+        FocusScope.of(context).requestFocus(FocusNode());
       },
       autofocus: false,
       textAlign: TextAlign.center,
