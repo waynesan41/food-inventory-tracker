@@ -143,8 +143,8 @@ class FoodDetailScreen extends StatelessWidget {
                             ),
                           ),
                           Text(foodDetail.description ?? "No Description"),
-                          Text("ID:${foodDetail.id.toString()}"),
-                          Text(foodDetail.imgUrl ?? "No Image"),
+                          // Text("ID:${foodDetail.id.toString()}"),
+                          // Text(foodDetail.imgUrl ?? "No Image"),
                         ],
                       ),
                     )
